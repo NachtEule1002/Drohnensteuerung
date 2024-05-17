@@ -10,6 +10,10 @@ import KeyboardControl
 # VARIABLEN
 #-------------------------------------------------------------------------------------
 
+# Großgeschrieben = Feste Variablen
+DROHNE_AKTIV = False
+EINGABEMODUS = "xbox" # xbox oder key
+
 running = True
 
 #-------------------------------------------------------------------------------------
@@ -25,10 +29,11 @@ def checkForExit():
 
 
 #-------------------------------------------------------------------------------------
-            
-tello = tello.Tello()
-tello.connect()
-print(tello.get_battery())
+
+if DROHNE_AKTIV: #Nur wenn Drohne aktiv
+    tello = tello.Tello()
+    tello.connect()
+    print(tello.get_battery())
 #tello.streamon()
 
 pygame.init()
@@ -44,7 +49,15 @@ while running:
 
     checkForExit()
 
-    KeyboardControl.keyboardControl()
+    # Steuerungsstandard: [Pfeil hoch runter, Pfeil links rechts, W und S, A und D, starten, landen]
+
+    if EINGABEMODUS == "key":
+        #Daten von Tastatur
+        KeyboardControl.keyboardControl()
+    else:
+        #Daten von Controller
+
+    # Hier die Daten in Bewegungsbefehle
         
     #pygame.display.update()
     #clock.tick(60)
