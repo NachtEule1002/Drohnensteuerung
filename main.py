@@ -54,8 +54,9 @@ while running:
     if EINGABEMODUS == "key":
         #Daten von Tastatur
         KeyboardControl.keyboardControl()
-    else:
+    #else:
         #Daten von Controller
+
 
     # Hier die Daten in Bewegungsbefehle
         
