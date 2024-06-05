@@ -31,4 +31,5 @@ def keyboardControl():
         tello.takeoff()
     elif gedrueckt[pygame.K_q]:
         tello.land()
+    return[eingabe, rl, ]
     tello.send_rc_control(rl, fb, ud, yv)
