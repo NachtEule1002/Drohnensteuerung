@@ -49,8 +49,8 @@ while running:
 
     checkForExit()
 
-    # Steuerungsstandard: [Eingabe gegeben, Pfeil hoch runter, Pfeil links rechts, W und S, A und D, starten, landen, Button3, Button4]
-    # [0 und 1, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
+    # Steuerungsstandard: [Eingabe gegeben, Pfeil hoch runter, Pfeil links rechts, W und S, A und D, starten, landen]
+    # [0 und 1, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1]
 
     if EINGABEMODUS == "key":
         #Daten von Tastatur
