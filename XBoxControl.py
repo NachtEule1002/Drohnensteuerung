@@ -41,11 +41,18 @@ class XboxController(object):
         xr = round(self.RightJoystickX, 2)
         yr = round(self.RightJoystickY, 2)
         a = round(self.A, 2)
-        b = round(self.X, 2) # b=1, x=2
+        b = round(self.B, 2) # b=1, x=2
+        x = round(self.X, 2)
+        y = round(self.Y, 2)
         rb = round(self.RightBumper, 2)
         lb = round(self.LeftBumper, 2)
-        rt = round(self.LeftTrigger, 2)
-        return [xl, yl, xr, yr, a, b, rb, lb, rt]
+
+        if xl+yl+xr+yr+a+b+rb+lb+a+b+x+y > 0: # check, if something is pressed on the controller
+            iscontrol = True
+        else:
+            iscontrol = False
+
+        return [iscontrol, xl*100, yl*100, xr*100, yr*100, a, b, x, y, rb, lb]
 
 
     def _monitor_controller(self):
