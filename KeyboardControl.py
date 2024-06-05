@@ -3,33 +3,32 @@
 import pygame
 from djitellopy import tello
 
-speed = 80
-
 def keyboardControl():
 
     # Tastenbelegung und -abfrage
 
-    rl, fb, ud, yv = 0, 0, 0, 0
+    eingabe, ud, yv, fb, rl, start, land = 0, 0, 0, 0, 0, 0, 0
     gedrueckt = pygame.key.get_pressed()
     if gedrueckt[pygame.K_UP]:
-        fb = speed
+        ud = 100
     elif gedrueckt[pygame.K_DOWN]:
-        fb = -speed
+        ud = -100
     if gedrueckt[pygame.K_RIGHT]:
-        rl = speed        
+        yv = 100
     elif gedrueckt[pygame.K_LEFT]:
-        rl = -speed
+        yv = -100
     if gedrueckt[pygame.K_w]:
-        ud = speed
+        fb = 100
     elif gedrueckt[pygame.K_s]:
-        ud = -speed
+        fb = -100
     if gedrueckt[pygame.K_d]:
-        yv = speed
+        rl = 100
     elif gedrueckt[pygame.K_a]:
-        yv = -speed
+        rl = -100
     if gedrueckt[pygame.K_e]:
-        tello.takeoff()
+        start = 1
     elif gedrueckt[pygame.K_q]:
-        tello.land()
-    return[eingabe, rl, ]
-    tello.send_rc_control(rl, fb, ud, yv)
+        land = 1
+    return[eingabe, ud, yv, fb, rl, start, land, 0, 0]
+    
+    #tello.send_rc_control(rl, fb, ud, yv)
