@@ -47,7 +47,7 @@ class XboxController(object):
         rb = round(self.RightBumper, 2)
         lb = round(self.LeftBumper, 2)
 
-        if xl+yl+xr+yr+a+b+rb+lb+a+b+x+y > 0: # check, if something is pressed on the controller
+        if abs(xl)+abs(yl)+abs(xr)+abs(yr)+a+b+rb+lb+a+b+x+y > 0: # check, if something is pressed on the controller
             iscontrol = True
         else:
             iscontrol = False
