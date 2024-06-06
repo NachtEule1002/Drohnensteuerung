@@ -5,7 +5,7 @@ from PIL import Image
 
 
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((1500, 1000))
 clock = pygame.time.Clock()
 running = True
 
@@ -29,11 +29,9 @@ while running:
     #cv2.imshow("Bild", img)
     #cv2.waitKey(1)
 
-    img = cv2.resize(img,(1920,1080))
+    #img = cv2.resize(img,(1920,1080))
     
-
-
-    screen.blit(pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"BGR"), (0,0))
+    screen.blit(pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB"), (0,0))
 
 
     pygame.display.flip()

@@ -116,32 +116,12 @@ while running:
         SteuerungsDaten = ControllerDaten[1:9]
     
     print(SteuerungsDaten)
-    '''
-    if cnt > 100:
-    
-        print("versuche Bilder zu bekommen")
-        frame_read = tello.get_frame_read()
-        print("read hat funktioniert")
-        time.sleep(1)
 
-        imp = pygame.image.load(frame_read.frame).convert()
-
-        scrn.blit(imp, (0,0))
-
-        # Hier die Daten in Bewegungsbefehle
-
-        pygame.display.flip()
-    '''
-    pygame.display.update()
 
     if DROHNE_AKTIV:
         print("Batterie-Ladestand: " + str(tello.get_battery()) + "%")
         print("vx: "+str(tello.get_speed_x()) + " vy: " + str(tello.get_speed_y()) + " vz: " + str(tello.get_speed_z()))
         dronecommunication.sendcontrols(SteuerungsDaten)
-    
-    clock.tick(60)
 
     time.sleep(0.1)
-
-    cnt = cnt+1
     
