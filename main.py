@@ -11,6 +11,7 @@ import os
 import time
 from inputs import get_gamepad
 import socket
+import dronecomms
 #-------------------------------------------------------------------------------------
 # VARIABLEN
 #-------------------------------------------------------------------------------------
@@ -64,6 +65,7 @@ if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     #print("hallo")
     print(tello.get_battery())
     tello.streamon()
+    dronecomms.dronecomms.initialise(tello)
 
 pygame.init()
 screen = pygame.display.set_mode((800,800))
@@ -129,6 +131,8 @@ while running:
         pygame.display.flip()
     '''
     pygame.display.update()
+
+    dronecomms.dronecomms.sendcontrols(SteuerungsDaten)
     
     clock.tick(60)
 
