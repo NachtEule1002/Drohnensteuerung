@@ -1,7 +1,7 @@
 from djitellopy import tello
 import cv2
 import pygame
-
+from PIL import Image
 
 
 pygame.init()
@@ -29,7 +29,11 @@ while running:
     #cv2.imshow("Bild", img)
     #cv2.waitKey(1)
 
-    screen.blit(img, (0,0))
+    img = cv2.resize(img,(1920,1080))
+    
+
+
+    screen.blit(pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"BGR"), (0,0))
 
 
     pygame.display.flip()
