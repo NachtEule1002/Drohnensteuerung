@@ -40,6 +40,7 @@ running = True
 
 controller = XBoxControl.XboxController()
 
+
 #-------------------------------------------------------------------------------------
 # METHODEN
 #-------------------------------------------------------------------------------------
@@ -65,7 +66,7 @@ if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     #print("hallo")
     print(tello.get_battery())
     tello.streamon()
-    dronecomms.dronecomms.initialise(tello)
+    dronecommunication = dronecomms.dronecomms(tello)
 
 pygame.init()
 screen = pygame.display.set_mode((800,800))
@@ -86,11 +87,12 @@ while running:
 
     clear()
     print(AUSGABEARRAY)
+    
 
     checkForExit()
 
 
-    # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten, landen, Button3, Button4]
+    # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
     # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
 
     #if EINGABEMODUS == "key":
@@ -132,11 +134,14 @@ while running:
     '''
     pygame.display.update()
 
-    dronecomms.dronecomms.sendcontrols(SteuerungsDaten)
+    if DROHNE_AKTIV:
+        print("Batterie-Ladestand: " + str(tello.get_battery()) + "%")
+        print("vx: "+str(tello.get_speed_x()) + " vy: " + str(tello.get_speed_y()) + " vz: " + str(tello.get_speed_z()))
+        dronecommunication.sendcontrols(SteuerungsDaten)
     
     clock.tick(60)
 
-    time.sleep(0.01)
+    time.sleep(0.1)
 
     cnt = cnt+1
     

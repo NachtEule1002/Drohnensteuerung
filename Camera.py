@@ -7,6 +7,7 @@ tello.streamon()
 
 print(tello.get_battery())
 
+tello.turn_motor_on()
 
 while True:
     img = tello.get_frame_read().frame

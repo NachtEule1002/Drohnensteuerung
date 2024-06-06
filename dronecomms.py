@@ -1,36 +1,55 @@
 from djitellopy import tello
 
 class dronecomms(object):
-    MYTELLO = tello.Tello()
-
+    
     initialised = False
 
-    def initialise(self, telloobj):
+    def __init__(self, telloobj):
 
         self.MYTELLO = telloobj
         self.initialised = True
 
+        self.tookoff = False
+        self.moving = False
+        
+
     def land(self):
         initialised = True
         if initialised:
-            self.MYTELLO.land()
+            try:
+                self.MYTELLO.land()
+                self.tookoff = False 
+            except:
+                print("nope")
+            
 
 
     def takeoff(self):
 
         if self.initialised:
-            self.MYTELLO.takeoff()
+            try:
+                self.MYTELLO.takeoff()
+                self.tookoff = True
+            except:
+                print("nope")
 
     def sendcontrols(self, movementtable):
 
         # Steuerungsstandard: [Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten, landen, Button3, Button4]
         # [-100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
         
-        print(self.initialised)
-        if self.initialised:
-            if movementtable[6] == 1:
-                print("Motor an")
-                self.MYTELLO.turn_motor_on()
-            else:
-                print("Motor aus")
-                self.MYTELLO.turn_motor_off()
+        if movementtable[4] == 1 and self.tookoff == False:
+            self.takeoff()
+            
+        elif movementtable[4]  == 1 and self.tookoff:
+            self.MYTELLO.send_rc_control(0,0,0,0)
+            self.land()
+                      
+        
+        if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10 and self.moving == False:
+            self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
+            self.moving = True
+            #print("sende")
+        elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True:
+            self.MYTELLO.send_rc_control(0,0,0,0)
+            self.moving = False
