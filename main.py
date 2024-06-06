@@ -10,13 +10,30 @@ import XBoxControl
 import os
 import time
 from inputs import get_gamepad
+import socket
 #-------------------------------------------------------------------------------------
 # VARIABLEN
 #-------------------------------------------------------------------------------------
 
 # Großgeschrieben = Feste Variablen
-DROHNE_AKTIV = False
-#EINGABEMODUS = "xbox" # xbox oder key
+
+DRONE_IP = '192.168.10.1'
+#DRONE_IP = '8.8.8.8'
+
+AUSGABEARRAY = []
+
+# Initialer Check, ob Drohne verbunden ist
+
+ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
+if ret != 0:
+    print("Drohne nicht verbunden")
+    AUSGABEARRAY.append("Drohne nicht verbunden")
+    DROHNE_AKTIV = False
+else:
+    print("Drohne verbunden")
+    AUSGABEARRAY.append("Drohne verbunden")
+    DROHNE_AKTIV = True
+    
 
 running = True
 
@@ -32,6 +49,7 @@ def checkForExit():
         if event.type == pygame.QUIT:
             tello.land()
             sys.exit()
+            tello.end()
 
 
 # Ausgabefenster clearen:
@@ -43,8 +61,9 @@ clear = lambda: os.system('cls' if os.name=='nt' else 'clear') #direkt für Wind
 if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     tello = tello.Tello()
     tello.connect()
+    #print("hallo")
     print(tello.get_battery())
-#tello.streamon()
+    tello.streamon()
 
 pygame.init()
 screen = pygame.display.set_mode((800,800))
@@ -54,12 +73,17 @@ pygame.display.set_caption("Drohnensteuerung")
 #-------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
 #-------------------------------------------------------------------------------------
-
-
+'''
+X=600
+Y = 600
+scrn = pygame.display.set_mode((X, Y))
+'''
+cnt = 1
 
 while running:
 
     clear()
+    print(AUSGABEARRAY)
 
     checkForExit()
 
@@ -88,11 +112,27 @@ while running:
         SteuerungsDaten = ControllerDaten[1:9]
     
     print(SteuerungsDaten)
+    '''
+    if cnt > 100:
+    
+        print("versuche Bilder zu bekommen")
+        frame_read = tello.get_frame_read()
+        print("read hat funktioniert")
+        time.sleep(1)
 
-    # Hier die Daten in Bewegungsbefehle
-        
-    #pygame.display.update()
-    #clock.tick(60)
+        imp = pygame.image.load(frame_read.frame).convert()
+
+        scrn.blit(imp, (0,0))
+
+        # Hier die Daten in Bewegungsbefehle
+
+        pygame.display.flip()
+    '''
+    pygame.display.update()
+    
+    clock.tick(60)
 
     time.sleep(0.01)
+
+    cnt = cnt+1
     
