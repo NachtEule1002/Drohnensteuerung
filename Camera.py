@@ -24,6 +24,7 @@ while running:
             running = False
 
     img = tello.get_frame_read().frame
+    img = pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB") # Formatierung
     #img = cv2.resize(img, (500,500))
     #img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     #cv2.imshow("Bild", img)
@@ -31,7 +32,7 @@ while running:
 
     #img = cv2.resize(img,(1920,1080))
     
-    screen.blit(pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB"), (0,0))
+    screen.blit(img, (0,0))
 
 
     pygame.display.flip()
