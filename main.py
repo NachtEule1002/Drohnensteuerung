@@ -19,7 +19,7 @@ import dronecomms
 # Großgeschrieben = Feste Variablen
 
 DRONE_IP = '192.168.10.1'
-#DRONE_IP = '8.8.8.8'
+#DRONE_IP = '8.8.8.8' #Testweise Google
 
 AUSGABEARRAY = []
 
@@ -120,7 +120,7 @@ while running:
 
     if DROHNE_AKTIV:
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
-        print("vx: "+str(tello.get_speed_x()) + " vy: " + str(tello.get_speed_y()) + " vz: " + str(tello.get_speed_z()))
+        print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(SteuerungsDaten)
 
     time.sleep(0.1)

@@ -9,48 +9,69 @@ class dronecomms(object):
 
         self.tookoff = False
         self.moving = False
+        self.connected = False
         
     def connect(self):
-
+        
         try:
             self.MYTELLO.connect()
+            self.connected = True
         except:
             print("Fehler")
 
     def getBattery(self):
-
-        try:
-            self.MYTELLO.get_battery()
-        except:
-            print("Fehler")
+        
+        if self.connected:
+            try:
+                return self.MYTELLO.get_battery()
+            except:
+                print("Fehler")
 
     def streamon(self):
-        try:
-            self.MYTELLO.streamon()
-        except:
-            print("Fehler")
+        if self.connected:
+            try:
+                self.MYTELLO.streamon()
+            except:
+                print("Fehler")
 
     def streamoff(self):
-
-        try:
-            self.MYTELLO.streamoff()
-        except:
-            print("Fehler")
+        if self.connected:
+            try:
+                self.MYTELLO.streamoff()
+            except:
+                print("Fehler")
 
     def land(self):
-        initialised = True
-        if initialised:
+        
+        if self.connected:
             try:
                 self.MYTELLO.land()
                 self.tookoff = False 
             except:
                 print("Fehler")
             
+    def getspeed(self, dir):
 
+        if self.connected:
+            if dir== "x":
+                return self.MYTELLO.get_speed_x
+            elif dir == "y":
+                return self.MYTELLO.get_speed_y
+            else:
+                self.MYTELLO.get_speed_z
+
+    def getacceleration(self, dir):
+        if self.connected:
+            if dir== "x":
+                return self.MYTELLO.get_acceleration_x
+            elif dir == "y":
+                return self.MYTELLO.get_acceleration_y
+            else:
+                self.MYTELLO.get_acceleration_z
 
     def takeoff(self):
 
-        if self.initialised:
+        if self.connected:
             try:
                 self.MYTELLO.takeoff()
                 self.tookoff = True
@@ -62,18 +83,19 @@ class dronecomms(object):
         # Steuerungsstandard: [Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten, landen, Button3, Button4]
         # [-100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
         
-        if movementtable[4] == 1 and self.tookoff == False:
-            self.takeoff()
+        if self.connected:
+            if movementtable[4] == 1 and self.tookoff == False:
+                self.takeoff()
+                
+            elif movementtable[4]  == 1 and self.tookoff:
+                self.MYTELLO.send_rc_control(0,0,0,0)
+                self.land()
+                        
             
-        elif movementtable[4]  == 1 and self.tookoff:
-            self.MYTELLO.send_rc_control(0,0,0,0)
-            self.land()
-                      
-        
-        if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:
-            self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
-            self.moving = True
-            #print("sende")
-        elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True:
-            self.MYTELLO.send_rc_control(0,0,0,0)
-            self.moving = False
+            if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:
+                self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
+                self.moving = True
+                #print("sende")
+            elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True:
+                self.MYTELLO.send_rc_control(0,0,0,0)
+                self.moving = False
