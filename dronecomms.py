@@ -46,7 +46,7 @@ class dronecomms(object):
             self.land()
                       
         
-        if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10 and self.moving == False:
+        if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:
             self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
             self.moving = True
             #print("sende")
