@@ -1,4 +1,5 @@
 from djitellopy import tello
+import pygame
 
 class dronecomms(object):
     
@@ -77,6 +78,16 @@ class dronecomms(object):
                 self.tookoff = True
             except:
                 print("Fehler")
+
+    def getImage(self):
+
+        try:
+            img = tello.get_frame_read().frame
+            img = pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB") # Formatierung
+            return img
+        
+        except: 
+            print("Fehler")
 
     def sendcontrols(self, movementtable):
 
