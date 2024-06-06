@@ -2,16 +2,40 @@ from djitellopy import tello
 
 class dronecomms(object):
     
-    initialised = False
+    def __init__(self):
 
-    def __init__(self, telloobj):
-
-        self.MYTELLO = telloobj
+        self.MYTELLO = tello.Tello()
         self.initialised = True
 
         self.tookoff = False
         self.moving = False
         
+    def connect(self):
+
+        try:
+            self.MYTELLO.connect()
+        except:
+            print("Fehler")
+
+    def getBattery(self):
+
+        try:
+            self.MYTELLO.get_battery()
+        except:
+            print("Fehler")
+
+    def streamon(self):
+        try:
+            self.MYTELLO.streamon()
+        except:
+            print("Fehler")
+
+    def streamoff(self):
+
+        try:
+            self.MYTELLO.streamoff()
+        except:
+            print("Fehler")
 
     def land(self):
         initialised = True
@@ -20,7 +44,7 @@ class dronecomms(object):
                 self.MYTELLO.land()
                 self.tookoff = False 
             except:
-                print("nope")
+                print("Fehler")
             
 
 
@@ -31,7 +55,7 @@ class dronecomms(object):
                 self.MYTELLO.takeoff()
                 self.tookoff = True
             except:
-                print("nope")
+                print("Fehler")
 
     def sendcontrols(self, movementtable):
 

@@ -49,9 +49,10 @@ controller = XBoxControl.XboxController()
 def checkForExit():   
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            tello.land()
+            drone.streamoff()
+            drone.land()
             sys.exit()
-            tello.end()
+            
 
 
 # Ausgabefenster clearen:
@@ -61,12 +62,11 @@ clear = lambda: os.system('cls' if os.name=='nt' else 'clear') #direkt für Wind
 #-------------------------------------------------------------------------------------
 
 if DROHNE_AKTIV: #Nur wenn Drohne aktiv
-    tello = tello.Tello()
-    tello.connect()
-    #print("hallo")
-    print(tello.get_battery())
-    tello.streamon()
-    dronecommunication = dronecomms.dronecomms(tello)
+    drone = dronecomms.dronecomms()
+    drone.connect()
+    drone.getBattery()
+    drone.streamon()
+    
 
 pygame.init()
 screen = pygame.display.set_mode((800,800))
@@ -119,9 +119,9 @@ while running:
 
 
     if DROHNE_AKTIV:
-        print("Batterie-Ladestand: " + str(tello.get_battery()) + "%")
+        print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(tello.get_speed_x()) + " vy: " + str(tello.get_speed_y()) + " vz: " + str(tello.get_speed_z()))
-        dronecommunication.sendcontrols(SteuerungsDaten)
+        drone.sendcontrols(SteuerungsDaten)
 
     time.sleep(0.1)
     
