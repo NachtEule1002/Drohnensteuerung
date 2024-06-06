@@ -23,8 +23,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-
-while True:
     img = tello.get_frame_read().frame
     #img = cv2.resize(img, (500,500))
     #img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
