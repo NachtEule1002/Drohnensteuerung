@@ -9,9 +9,11 @@ screen = pygame.display.set_mode((1500, 1000))
 clock = pygame.time.Clock()
 running = True
 
-tello = tello.Tello()
-tello.connect()
-tello.streamon()
+#tello = tello.Tello()
+#tello.connect()
+#tello.streamon()
+
+drone = dronecomms.dronecomms()
 
 #pfeil = pygame.image.load("pfeil.jpg")
 
@@ -26,7 +28,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    img = dronecomms.dronecomms.getImage()
+    img = drone.getImage()
     #img = cv2.resize(img, (500,500))
     #img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     #cv2.imshow("Bild", img)
