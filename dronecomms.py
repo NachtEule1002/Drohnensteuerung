@@ -82,7 +82,7 @@ class dronecomms(object):
     def getImage(self):
 
         try:
-            img = tello.get_frame_read().frame
+            img = self.MYTELLO.get_frame_read().frame
             img = pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB") # Formatierung
             return img
         
