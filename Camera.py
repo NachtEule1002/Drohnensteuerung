@@ -14,7 +14,8 @@ running = True
 #tello.streamon()
 
 drone = dronecomms.dronecomms()
-
+drone.connect()
+drone.streamon()
 #pfeil = pygame.image.load("pfeil.jpg")
 
 while running:
