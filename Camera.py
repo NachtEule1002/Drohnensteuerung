@@ -16,6 +16,11 @@ tello.streamon()
 #pfeil = pygame.image.load("pfeil.jpg")
 
 while running:
+# def imgtopygame(droneimg):
+# Funktionsaufruf: Camera.imgtopy(drone.getImage())
+
+#def imgtopygame(droneobj):
+#Funktionsaufruf: Camera.imgtopy(drone)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
