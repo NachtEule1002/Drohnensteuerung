@@ -68,11 +68,6 @@ if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     drone.streamon()
     
 
-pygame.init()
-screen = pygame.display.set_mode((800,800))
-clock = pygame.time.Clock()
-pygame.display.set_caption("Drohnensteuerung")
-
 #-------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
 #-------------------------------------------------------------------------------------
@@ -81,7 +76,6 @@ X=600
 Y = 600
 scrn = pygame.display.set_mode((X, Y))
 '''
-cnt = 1
 
 while running:
 
