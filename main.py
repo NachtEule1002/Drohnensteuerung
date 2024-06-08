@@ -4,7 +4,6 @@
 
 from djitellopy import tello
 import pygame
-import sys
 import KeyboardControl
 import XBoxControl
 import os
@@ -12,6 +11,8 @@ import time
 from inputs import get_gamepad
 import socket
 import dronecomms
+import dashboard
+import ImageProcessing
 #-------------------------------------------------------------------------------------
 # VARIABLEN
 #-------------------------------------------------------------------------------------
@@ -44,14 +45,6 @@ controller = XBoxControl.XboxController()
 #-------------------------------------------------------------------------------------
 # METHODEN
 #-------------------------------------------------------------------------------------
-
-# Gucken ob Fenster geschlossen werden soll
-def checkForExit():   
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            drone.streamoff()
-            drone.land()
-            sys.exit()
             
 
 
@@ -66,6 +59,7 @@ if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     drone.connect()
     drone.getBattery()
     drone.streamon()
+    dashboard = dashboard.dashboard()
     
 
 #-------------------------------------------------------------------------------------
@@ -83,8 +77,10 @@ while running:
     print(AUSGABEARRAY)
     
 
-    checkForExit()
-
+    dashboard.checkForExit()
+    #dashboard.show(drone.getImage())
+    #dashboard.new()
+    
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
     # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
@@ -118,4 +114,3 @@ while running:
         drone.sendcontrols(SteuerungsDaten)
 
     time.sleep(0.1)
-    
