@@ -35,5 +35,5 @@ class dashboard():
 
 
     # Image von Main bekommen
-    def show(img):
-        screen.blit(img, (0,0))
+    #def show(img):
+        #screen.blit(img, (0,0))
