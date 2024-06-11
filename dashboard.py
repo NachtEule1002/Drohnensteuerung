@@ -22,13 +22,12 @@ class dashboard():
     # Gucken ob Fenster geschlossen werden soll
     
                 
-                
 
 
 
 
     # Screenupdate
-    def new():
+    def new(self):
         pygame.display.flip()
 
 
