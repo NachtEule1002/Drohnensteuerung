@@ -44,7 +44,7 @@ class dronecomms(object):
 
     def land(self):
         
-        if self.connected:
+        if self.connected and self.tookoff:
             try:
                 self.MYTELLO.land()
                 self.tookoff = False 
@@ -72,7 +72,7 @@ class dronecomms(object):
 
     def takeoff(self):
 
-        if self.connected:
+        if self.connected and self.tookoff == False:
             try:
                 self.MYTELLO.takeoff()
                 self.tookoff = True
