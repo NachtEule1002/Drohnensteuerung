@@ -70,6 +70,27 @@ class dronecomms(object):
             else:
                 self.MYTELLO.get_acceleration_z
 
+    def getheight(self):
+        if self.connected:
+            try:
+                return self.MYTELLO.get_height()
+            except:
+                print("Fehler")
+
+    def getcurrentstate(self):
+        if self.connected:
+            try:
+                return self.MYTELLO.get_current_state()
+            except:
+                print("Fehler")
+
+    def gettemperature(self):
+        if self.connected:
+            try:
+                return self.MYTELLO.get_temperature()
+            except:
+                print("Fehler")
+
     def takeoff(self):
 
         if self.connected and self.tookoff == False:
