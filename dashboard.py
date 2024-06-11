@@ -5,13 +5,16 @@
 
 import pygame
 import sys
+import dronecomms
+import main
 
 class dashboard():
 
     # Fenster erstellen und starten
-    def __init__(self):
+    def __init__(self, droneobject):
+        self.drone = droneobject
         pygame.init()                                           
-        screen = pygame.display.set_mode((1500, 1000))  
+        self.screen = pygame.display.set_mode((1500, 1000))  
         pygame.display.set_caption("Dashboard Drohnensteuerung")
 
 
@@ -19,9 +22,10 @@ class dashboard():
     def checkForExit(self):   
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                #Hier noch Drohne landen, wenn Fenster geschlossen wird????
+                print("EXIT")
                 pygame.quit()
-                sys.exit()
+                main.quitApp()
+                
 
 
 
@@ -33,7 +37,7 @@ class dashboard():
 
 
 
-
-    # Image von Main bekommen
-    #def show(img):
-        #screen.blit(img, (0,0))
+    # Bild anzeigen
+    def showImage(self, img):
+        self.screen.blit(img, (0,0))
+        pygame.display.flip()

@@ -13,6 +13,7 @@ import socket
 import dronecomms
 import dashboard
 import ImageProcessing
+import sys
 #-------------------------------------------------------------------------------------
 # VARIABLEN
 #-------------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ else:
     AUSGABEARRAY.append("Drohne verbunden")
     DROHNE_AKTIV = True
     
-
+global running
 running = True
 
 controller = XBoxControl.XboxController()
@@ -46,7 +47,11 @@ controller = XBoxControl.XboxController()
 # METHODEN
 #-------------------------------------------------------------------------------------
             
-
+#Exit
+def quitApp():
+    running = False
+    drone.land()
+    sys.exit()
 
 # Ausgabefenster clearen:
 
@@ -59,7 +64,7 @@ if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     drone.connect()
     drone.getBattery()
     drone.streamon()
-    dashboard = dashboard.dashboard()
+    dashboard = dashboard.dashboard(drone)
     
 
 #-------------------------------------------------------------------------------------
@@ -78,7 +83,11 @@ while running:
     
 
     dashboard.checkForExit()
-    #dashboard.show(drone.getImage())
+
+    currentImg = drone.getImage()
+    dashboard.showImage(currentImg)
+
+
     #dashboard.new()
     
 
@@ -113,4 +122,4 @@ while running:
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(SteuerungsDaten)
 
-    time.sleep(0.1)
+    time.sleep(1/60)

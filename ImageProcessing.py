@@ -1,6 +1,4 @@
 #BILDVERARBEITUNG
 #----------------------------------------------
 
-
-#def getImage(img):
-    
+#def showImage(img):
