@@ -37,7 +37,7 @@ else:
     AUSGABEARRAY.append("Drohne verbunden")
     DROHNE_AKTIV = True
     
-global running
+
 running = True
 
 controller = XBoxControl.XboxController()
@@ -48,10 +48,20 @@ controller = XBoxControl.XboxController()
 #-------------------------------------------------------------------------------------
             
 #Exit
-def quitApp():
-    running = False
-    drone.land()
-    sys.exit()
+
+def checkForExit():   
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            global running
+            pygame.quit()
+            if DROHNE_AKTIV:
+                drone.land()
+            running = False
+            print("EXIT")
+            sys.exit()
+
+    
+    
 
 # Ausgabefenster clearen:
 
@@ -65,6 +75,8 @@ if DROHNE_AKTIV: #Nur wenn Drohne aktiv
     drone.getBattery()
     drone.streamon()
     dashboard = dashboard.dashboard(drone)
+else:
+    dashboard = dashboard.dashboard(False)
     
 
 #-------------------------------------------------------------------------------------
@@ -82,10 +94,9 @@ while running:
     print(AUSGABEARRAY)
     
 
-    dashboard.checkForExit()
+    checkForExit()
 
-    currentImg = drone.getImage()
-    dashboard.showImage(currentImg)
+    
 
 
     #dashboard.new()
@@ -118,6 +129,10 @@ while running:
 
 
     if DROHNE_AKTIV:
+
+        currentImg = drone.getImage()
+        dashboard.showImage(currentImg)
+
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(SteuerungsDaten)
