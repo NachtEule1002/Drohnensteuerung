@@ -25,6 +25,7 @@ DRONE_IP = '192.168.10.1'
 
 AUSGABEARRAY = []
 
+
 # Initialer Check, ob Drohne verbunden ist
 
 ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
@@ -96,11 +97,13 @@ while running:
 
     checkForExit()
 
-    
-
-
+    #currentImg = drone.getImage()
+    #dashboard.showImage(currentImg)
+    #height = drone.getheight()
+    #dashboard.showHeight(height)
     #dashboard.new()
     
+    pygame.display.flip()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
     # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
@@ -130,8 +133,8 @@ while running:
 
     if DROHNE_AKTIV:
 
-        currentImg = drone.getImage()
-        dashboard.showImage(currentImg)
+        #currentImg = drone.getImage()
+        #dashboard.showImage(currentImg)
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
