@@ -9,13 +9,11 @@ import dronecomms
 
 
 
-class dashboard():
+class dashboard(object):
 
-    FONT = pygame.font.SysFont("arial", 60, False, False)
+    
     TEXTCOLOR = (0, 0, 0)
     BACKGROUNDCOLOR = None
-
-
 
     # Fenster erstellen und starten
     def __init__(self, droneobject):
@@ -25,6 +23,7 @@ class dashboard():
         self.screen = pygame.display.set_mode((1500, 1000))
         self.screen.fill((255,255,255)) 
         pygame.display.set_caption("Dashboard Drohnensteuerung")
+        self.FONT = pygame.font.SysFont("arial", 60, False, False)
         
 
 
@@ -33,7 +32,7 @@ class dashboard():
         pygame.display.flip()
 
     def showText(self, text, x, y):
-        img = dashboard.FONT.render(text, True, dashboard.TEXTCOLOR, dashboard.BACKGROUNDCOLOR)
+        img = self.FONT.render(text, True, dashboard.TEXTCOLOR, dashboard.BACKGROUNDCOLOR)
         self.screen.blit(img ,(x,y))
 
     # Bild anzeigen
