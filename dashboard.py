@@ -43,5 +43,5 @@ class dashboard(object):
     def showHeight(self, height):
         self.screen.blit(str(height), (0,0))
 
-    def all():
-        dashboard.showText("Test", 1200, 800)
+    def all(self):
+        self.showText("Test", 1200, 800)
