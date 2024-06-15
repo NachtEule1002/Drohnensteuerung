@@ -97,13 +97,14 @@ while running:
 
     checkForExit()
 
-    #currentImg = drone.getImage()
-    #dashboard.showImage(currentImg)
+
+
     #height = drone.getheight()
     #dashboard.showHeight(height)
-    #dashboard.new()
 
-    dashboard.showText("Hallo", 0, 0)
+    #dashboard.camera()
+
+    dashboard.showText("Hallo", 1200, 800)
     
     pygame.display.flip()
 
@@ -135,10 +136,8 @@ while running:
 
     if DROHNE_AKTIV:
 
-        #currentImg = drone.getImage()
-        #dashboard.showImage(currentImg)
-
-       
+        currentImg = drone.getImage()
+        dashboard.showImage(currentImg)
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
