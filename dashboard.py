@@ -43,5 +43,7 @@ class dashboard(object):
     def showHeight(self, height):
         self.screen.blit(str(height), (0,0))
 
+    #Alle Grafiken initialisieren
     def all(self):
         self.showText("Test", 1200, 800)
+        
