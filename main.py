@@ -103,9 +103,9 @@ while running:
     #dashboard.showHeight(height)
 
     #dashboard.camera()
-
-    dashboard.showText("Hallo", 1200, 800)
     
+    dashboard.all()
+
     pygame.display.flip()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
