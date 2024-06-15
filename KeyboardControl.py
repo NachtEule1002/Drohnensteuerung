@@ -1,7 +1,6 @@
 # Tastatursteuerung
 
 import pygame
-from djitellopy import tello
 
 def keyboardControl():
 
@@ -41,4 +40,3 @@ def keyboardControl():
         eingabe = True
     return[eingabe, ud, yv, fb, rl, start, land, 0, 0]
     
-    #tello.send_rc_control(rl, fb, ud, yv)
