@@ -28,6 +28,9 @@ AUSGABEARRAY = []
 
 # Initialer Check, ob Drohne verbunden ist
 
+#def print(msg):
+    #sys.stdout.write(msg)
+
 ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
 if ret != 0:
     print("Drohne nicht verbunden")
@@ -41,7 +44,7 @@ else:
 
 running = True
 
-controller = XBoxControl.XboxController()
+#controller = XBoxControl.XboxController()
 
 
 #-------------------------------------------------------------------------------------
@@ -91,7 +94,7 @@ scrn = pygame.display.set_mode((X, Y))
 
 while running:
 
-    clear()
+    #clear()
     print(AUSGABEARRAY)
     
 
@@ -104,8 +107,7 @@ while running:
 
     #dashboard.camera()
     
-    dashboard.all()
-
+    #dashboard.all()
     pygame.display.flip()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
@@ -119,20 +121,20 @@ while running:
         #Daten von Controller
     
     
-    ControllerDaten = controller.read()
+    #ControllerDaten = controller.read()
 
     SteuerungsDaten = [0,0,0,0,0,0,0,0]
     
-    if KeyboardDaten[0] == 1:
-        print("Nutze Keyboard")
-        SteuerungsDaten = KeyboardDaten[1:9]
-    else:
-        print("Nutze Controller")
-        #print(ControllerDaten)
-        SteuerungsDaten = ControllerDaten[1:9]
+    #if KeyboardDaten[0] == 1:
+    #    print("Nutze Keyboard")
+    SteuerungsDaten = KeyboardDaten[1:9]
+    #else:
+    #   print("Nutze Controller")
+    #    print(ControllerDaten)
+    #    SteuerungsDaten = ControllerDaten[1:9]
     
-    print(SteuerungsDaten)
-
+    #print(SteuerungsDaten)
+    #print("Hallo")
 
     if DROHNE_AKTIV:
 
@@ -143,4 +145,4 @@ while running:
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(SteuerungsDaten)
 
-    time.sleep(1/60)
+    time.sleep(1/15)
