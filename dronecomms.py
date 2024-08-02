@@ -18,7 +18,7 @@ class dronecomms(object):
             self.MYTELLO.connect()
             self.connected = True
         except:
-            print("Fehler ceonnect")
+            print("Fehler connect")
 
     def getBattery(self):
         

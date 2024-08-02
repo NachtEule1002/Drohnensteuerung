@@ -1,6 +1,6 @@
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 # MAIN
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 
 from djitellopy import tello
 import pygame
@@ -14,22 +14,18 @@ import dronecomms
 import dashboard
 import ImageProcessing
 import sys
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 # VARIABLEN
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 
 # Großgeschrieben = Feste Variablen
 
 DRONE_IP = '192.168.10.1'
-#DRONE_IP = '8.8.8.8' #Testweise Google
 
 AUSGABEARRAY = []
 
 
 # Initialer Check, ob Drohne verbunden ist
-
-#def print(msg):
-    #sys.stdout.write(msg)
 
 ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
 if ret != 0:
@@ -44,14 +40,14 @@ else:
 
 running = True
 
-#controller = XBoxControl.XboxController()
+# controller = XBoxControl.XboxController()
 
 
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 # METHODEN
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
             
-#Exit
+# Exit
 
 def checkForExit():   
     for event in pygame.event.get():
@@ -71,9 +67,9 @@ def checkForExit():
 
 clear = lambda: os.system('cls' if os.name=='nt' else 'clear') #direkt für Windows und Linux implementiert
 
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 
-if DROHNE_AKTIV: #Nur wenn Drohne aktiv
+if DROHNE_AKTIV: # Nur wenn Drohne aktiv
     drone = dronecomms.dronecomms()
     drone.connect()
     drone.getBattery()
@@ -83,9 +79,9 @@ else:
     dashboard = dashboard.dashboard(False)
     
 
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
-#-------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 '''
 X=600
 Y = 600
@@ -94,7 +90,7 @@ scrn = pygame.display.set_mode((X, Y))
 
 while running:
 
-    #clear()
+    # clear()
     print(AUSGABEARRAY)
     
 
@@ -102,12 +98,10 @@ while running:
 
 
 
-    #height = drone.getheight()
-    #dashboard.showHeight(height)
-
-    #dashboard.camera()
+    # height = drone.getheight()
+    # dashboard.showHeight(height)
     
-    #dashboard.all()
+    # dashboard.all()
     pygame.display.flip()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
