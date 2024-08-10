@@ -54,21 +54,21 @@ class dronecomms(object):
     def getspeed(self, dir):
 
         if self.connected:
-            if dir== "x":
-                return self.MYTELLO.get_speed_x
+            if dir == "x":
+                return self.MYTELLO.get_speed_x()
             elif dir == "y":
-                return self.MYTELLO.get_speed_y
+                return self.MYTELLO.get_speed_y()
             else:
-                self.MYTELLO.get_speed_z
+                return self.MYTELLO.get_speed_z()
 
     def getacceleration(self, dir):
         if self.connected:
             if dir== "x":
-                return self.MYTELLO.get_acceleration_x
+                return self.MYTELLO.get_acceleration_x()
             elif dir == "y":
-                return self.MYTELLO.get_acceleration_y
+                return self.MYTELLO.get_acceleration_y()
             else:
-                self.MYTELLO.get_acceleration_z
+                return self.MYTELLO.get_acceleration_z()
 
     def getheight(self):
         if self.connected:
@@ -110,24 +110,31 @@ class dronecomms(object):
         except: 
             print("Fehler img")
 
+    def flip(self):
+        
+        if self.tookoff:
+            self.MYTELLO.flip('f')
+
     def sendcontrols(self, movementtable):
 
-        # Steuerungsstandard: [Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten, landen, Button3, Button4]
-        # [-100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
-        
+        # control-standard: [up + down, rotate cw + ccw, forward + backward, right + left, takeoff + land, flip, Button3 (unassigned), Button4 (unass.)]
+        # [-100 to 100, -100 to 100, -100 to 100, -100 to 100, 0 or 1, 0 or 1, 0 or 1, 0 or 1]
+
         if self.connected:
-            if movementtable[4] == 1 and self.tookoff == False:
+            if movementtable[4] == 1 and self.tookoff == False: # takeoff
                 self.takeoff()
                 
-            elif movementtable[4]  == 1 and self.tookoff:
+            elif movementtable[4]  == 1 and self.tookoff:       # land
                 self.MYTELLO.send_rc_control(0,0,0,0)
                 self.land()
-                        
+
+            if movementtable[5] == 1:   # optional flip
+                self.flip()
             
-            if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:
+            if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:  # move drone
                 self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
                 self.moving = True
                 #print("sende")
-            elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True:
+            elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True: # stop movement
                 self.MYTELLO.send_rc_control(0,0,0,0)
                 self.moving = False

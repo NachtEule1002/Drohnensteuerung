@@ -47,8 +47,8 @@ class XboxController(object):
         rb = round(self.RightBumper, 2)
         lb = round(self.LeftBumper, 2)
 
-         # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
-        # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
+        # control-standard: [True or False, up + down, rotate cw + ccw, forward + backward, right + left, takeoff + land, flip, Button3 (unass.), Button4 (unass.)]
+        # [-100 to 100, -100 to 100, -100 to 100, -100 to 100, 0 or 1, 0 or 1, 0 or 1, 0 or 1]
 
 
         if abs(xl)+abs(yl)+abs(xr)+abs(yr)+a+b+rb+lb+a+b+x+y > 0: # check, if something is pressed on the controller
@@ -56,7 +56,7 @@ class XboxController(object):
         else:
             iscontrol = False
 
-        return [iscontrol, yr*100, xr*100, yl*100, xl*100, a, b, x, y, rb, lb]
+        return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, x, y, rb, lb]
 
 
     def _monitor_controller(self):
