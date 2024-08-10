@@ -18,7 +18,7 @@ class dronecomms(object):
             self.MYTELLO.connect()
             self.connected = True
         except:
-            print("Fehler")
+            print("Fehler ceonnect")
 
     def getBattery(self):
         
@@ -26,21 +26,21 @@ class dronecomms(object):
             try:
                 return self.MYTELLO.get_battery()
             except:
-                print("Fehler")
+                print("Fehler bat")
 
     def streamon(self):
         if self.connected:
             try:
                 self.MYTELLO.streamon()
             except:
-                print("Fehler")
+                print("Fehler stream")
 
     def streamoff(self):
         if self.connected:
             try:
                 self.MYTELLO.streamoff()
             except:
-                print("Fehler")
+                print("Fehler streamo")
 
     def land(self):
         
@@ -49,7 +49,7 @@ class dronecomms(object):
                 self.MYTELLO.land()
                 self.tookoff = False 
             except:
-                print("Fehler")
+                print("Fehler lnd")
             
     def getspeed(self, dir):
 
@@ -82,14 +82,14 @@ class dronecomms(object):
             try:
                 return self.MYTELLO.get_current_state()
             except:
-                print("Fehler")
+                print("Fehler state ")
 
     def gettemperature(self):
         if self.connected:
             try:
                 return self.MYTELLO.get_temperature()
             except:
-                print("Fehler")
+                print("Fehler tmp")
 
     def takeoff(self):
 
@@ -98,7 +98,7 @@ class dronecomms(object):
                 self.MYTELLO.takeoff()
                 self.tookoff = True
             except:
-                print("Fehler")
+                print("Fehler takeoff")
 
     def getImage(self):
 
@@ -108,7 +108,7 @@ class dronecomms(object):
             return img
         
         except: 
-            print("Fehler")
+            print("Fehler img")
 
     def flip(self):
         

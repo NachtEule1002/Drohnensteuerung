@@ -21,7 +21,7 @@ class dashboard(object):
         if droneobject != False:
             self.drone = droneobject
         pygame.init()                                          
-        self.screen = pygame.display.set_mode((1500, 1000))
+        self.screen = pygame.display.set_mode((1300, 900))
         self.screen.fill((255,255,255)) 
         pygame.display.set_caption("Dashboard Drohnensteuerung")
         self.FONT = pygame.font.SysFont("arial", 60, False, False)
@@ -48,4 +48,4 @@ class dashboard(object):
     #Alle Grafiken initialisieren
     def all(self):
         self.showText("Test", 1200, 800)
-        pygame.draw.rect(self.screen, (0,0,0), self.rect1)
+        #pygame.draw.rect(self.screen, (0,0,0), self.rect1)
