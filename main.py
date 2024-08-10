@@ -28,7 +28,7 @@ AUSGABEARRAY = []
 
 # Initialer Check, ob Drohne verbunden ist
 
-ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
+ret = os.system("ping -n 1 " + DRONE_IP + " -w 100") # Irgendwas funktioniert hier noch nicht mit der Erreichbarkeit der IP
 if ret != 0:
     print("Drohne nicht verbunden")
     AUSGABEARRAY.append("Drohne nicht verbunden")
@@ -37,9 +37,13 @@ else:
     print("Drohne verbunden")
     AUSGABEARRAY.append("Drohne verbunden")
     DROHNE_AKTIV = True
+
+#DROHNE_AKTIV = False
     
 
 running = True
+
+CAMACTIVE = True
 
 controller = XBoxControl.XboxController()
 
@@ -93,32 +97,17 @@ while running:
 
     clear()
     print(AUSGABEARRAY)
-    
 
     checkForExit()
 
-
-
-    #height = drone.getheight()
-    #dashboard.showHeight(height)
-
-    #dashboard.camera()
-    
-    dashboard.all()
-
     pygame.display.flip()
 
-    # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
-    # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
+    # data from keyboard
 
-    #if EINGABEMODUS == "key":
-        #Daten von Tastatur
     KeyboardDaten = KeyboardControl.keyboardControl()
 
-    #else:
-        #Daten von Controller
-    
-    
+    # data from controller
+
     ControllerDaten = controller.read()
 
     SteuerungsDaten = [0,0,0,0,0,0,0,0]
@@ -133,14 +122,15 @@ while running:
     
     print(SteuerungsDaten)
 
-
     if DROHNE_AKTIV:
 
-        currentImg = drone.getImage()
-        dashboard.showImage(currentImg)
+        if CAMACTIVE:
+
+            currentImg = drone.getImage()
+            dashboard.showImage(currentImg)
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(SteuerungsDaten)
 
-    time.sleep(1/60)
+    time.sleep(1/30)
