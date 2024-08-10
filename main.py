@@ -28,9 +28,6 @@ AUSGABEARRAY = []
 
 # Initialer Check, ob Drohne verbunden ist
 
-
-#ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
-
 out = ping(DRONE_IP, count=1, verbose=True)
 
 if "Request timed out" in str(out):
@@ -45,7 +42,7 @@ else:
 
 running = True
 
-# controller = XBoxControl.XboxController()
+controller = XBoxControl.XboxController()
 
 
 # -------------------------------------------------------------------------------------
@@ -120,17 +117,17 @@ while running:
         #Daten von Controller
     
     
-    #ControllerDaten = controller.read()
+    ControllerDaten = controller.read()
 
     SteuerungsDaten = [0,0,0,0,0,0,0,0]
     
-    #if KeyboardDaten[0] == 1:
-    #    print("Nutze Keyboard")
-    SteuerungsDaten = KeyboardDaten[1:9]
-    #else:
-    #   print("Nutze Controller")
-    #    print(ControllerDaten)
-    #    SteuerungsDaten = ControllerDaten[1:9]
+    if KeyboardDaten[0] == 1:
+        print("Nutze Keyboard")
+        SteuerungsDaten = KeyboardDaten[1:9]
+    else:
+        print("Nutze Controller")
+        print(ControllerDaten)
+        SteuerungsDaten = ControllerDaten[1:9]
     
     #print(SteuerungsDaten)
     #print("Hallo")
