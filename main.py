@@ -123,7 +123,7 @@ while running:
 
     if DROHNE_AKTIV:
 
-        currentImg = drone.getImage()
+        currentImg = ImageProcessing.processImage(drone.getImage())
         dashboard.showImage(currentImg)
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")

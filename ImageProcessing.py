@@ -1,4 +1,10 @@
 #BILDVERARBEITUNG
 #----------------------------------------------
 
-#def showImage(img):
+def processImage(img):
+
+    finalimg = img
+
+    # hier wird dann alles processed
+
+    return finalimg
