@@ -99,22 +99,12 @@ while running:
     checkForExit()
 
 
-
-    # height = drone.getheight()
-    # dashboard.showHeight(height)
-    
-    # dashboard.all()
     pygame.display.flip()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
     # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
 
-    #if EINGABEMODUS == "key":
-        #Daten von Tastatur
     KeyboardDaten = KeyboardControl.keyboardControl()
-
-    #else:
-        #Daten von Controller
     
     
     ControllerDaten = controller.read()
@@ -130,7 +120,6 @@ while running:
         SteuerungsDaten = ControllerDaten[1:9]
     
     print(SteuerungsDaten)
-    #print("Hallo")
 
     if DROHNE_AKTIV:
 
