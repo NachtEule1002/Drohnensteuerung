@@ -14,6 +14,7 @@ import dronecomms
 import dashboard
 import ImageProcessing
 import sys
+from pythonping import ping
 # -------------------------------------------------------------------------------------
 # VARIABLEN
 # -------------------------------------------------------------------------------------
@@ -27,8 +28,12 @@ AUSGABEARRAY = []
 
 # Initialer Check, ob Drohne verbunden ist
 
-ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
-if ret != 0:
+
+#ret = os.system("ping -n 1 " + DRONE_IP + " -w 100")
+
+out = ping(DRONE_IP, count=1, verbose=True)
+
+if "Request timed out" in str(out):
     print("Drohne nicht verbunden")
     AUSGABEARRAY.append("Drohne nicht verbunden")
     DROHNE_AKTIV = False
@@ -36,7 +41,7 @@ else:
     print("Drohne verbunden")
     AUSGABEARRAY.append("Drohne verbunden")
     DROHNE_AKTIV = True
-    
+
 
 running = True
 
@@ -90,7 +95,7 @@ scrn = pygame.display.set_mode((X, Y))
 
 while running:
 
-    # clear()
+    #clear()
     print(AUSGABEARRAY)
     
 
