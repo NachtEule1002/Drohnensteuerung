@@ -92,7 +92,7 @@ scrn = pygame.display.set_mode((X, Y))
 
 while running:
 
-    #clear()
+    clear()
     print(AUSGABEARRAY)
     
 
@@ -126,10 +126,10 @@ while running:
         SteuerungsDaten = KeyboardDaten[1:9]
     else:
         print("Nutze Controller")
-        print(ControllerDaten)
+        #print(ControllerDaten)
         SteuerungsDaten = ControllerDaten[1:9]
     
-    #print(SteuerungsDaten)
+    print(SteuerungsDaten)
     #print("Hallo")
 
     if DROHNE_AKTIV:
