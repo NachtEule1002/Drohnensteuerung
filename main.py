@@ -1,7 +1,7 @@
 # -------------------------------------------------------------------------------------
 # MAIN
 # -------------------------------------------------------------------------------------
-
+import cv2
 from djitellopy import tello
 import pygame
 import KeyboardControl
@@ -90,6 +90,8 @@ Y = 600
 scrn = pygame.display.set_mode((X, Y))
 '''
 
+#vid = cv2.VideoCapture(0)
+
 while running:
 
     clear()
@@ -111,20 +113,35 @@ while running:
 
     SteuerungsDaten = [0,0,0,0,0,0,0,0]
     
-    if KeyboardDaten[0] == 1:
-        print("Nutze Keyboard")
-        SteuerungsDaten = KeyboardDaten[1:9]
-    else:
-        print("Nutze Controller")
-        #print(ControllerDaten)
-        SteuerungsDaten = ControllerDaten[1:9]
-    
-    print(SteuerungsDaten)
+
+
+    #ret, frame = vid.read()
+
+    #currentImg = ImageProcessing.processImage(frame)
 
     if DROHNE_AKTIV:
 
-        currentImg = ImageProcessing.processImage(drone.getImage())
+        currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage())
         dashboard.showImage(currentImg)
+
+        if KeyboardDaten[0] == 1:
+            print("Nutze Keyboard")
+            SteuerungsDaten = KeyboardDaten[1:9]
+
+        elif ControllerDaten[0] == 1:
+            print("Nutze Controller")
+            # print(ControllerDaten)
+            SteuerungsDaten = ControllerDaten[1:9]
+        else:
+            #print("Nutze Bildsteuerung")
+            #SteuerungsDaten = BildsteuerDaten[1:9]
+
+            print("Nutze Controller")
+            # print(ControllerDaten)
+            SteuerungsDaten = ControllerDaten[1:9]
+
+
+        print(SteuerungsDaten)
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))

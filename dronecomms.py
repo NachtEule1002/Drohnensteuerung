@@ -104,7 +104,7 @@ class dronecomms(object):
 
         try:
             img = self.MYTELLO.get_frame_read().frame
-            img = pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB") # Formatierung
+            #img = pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB") # Formatierung
             return img
         
         except: 
