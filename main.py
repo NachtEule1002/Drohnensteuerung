@@ -89,7 +89,7 @@ else:
 
 while running:
 
-    clear()
+    #clear()
     print(AUSGABEARRAY)
 
 
@@ -115,8 +115,9 @@ while running:
     #currentImg = ImageProcessing.processImage(frame)
 
     if DROHNE_AKTIV:
-
+        print("ANGEKOMMEN")
         currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage())
+
         dashboard.showImage(currentImg)
 
         if KeyboardDaten[0] == 1:
