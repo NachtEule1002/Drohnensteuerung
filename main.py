@@ -42,7 +42,7 @@ else:
 
 running = True
 
-controller = XBoxControl.XboxController()
+#controller = XBoxControl.XboxController()
 
 
 # -------------------------------------------------------------------------------------
@@ -77,9 +77,10 @@ if DROHNE_AKTIV: # Nur wenn Drohne aktiv
     drone.getBattery()
     drone.streamon()
     dashboard = dashboard.dashboard(drone)
+
 else:
     dashboard = dashboard.dashboard(False)
-    
+    print("Drohne schallert")
 
 # -------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
@@ -104,7 +105,7 @@ while running:
     KeyboardDaten = KeyboardControl.keyboardControl()
     
     
-    ControllerDaten = controller.read()
+    #ControllerDaten = controller.read()
 
     SteuerungsDaten = [0,0,0,0,0,0,0,0]
     
@@ -124,10 +125,10 @@ while running:
             print("Nutze Keyboard")
             SteuerungsDaten = KeyboardDaten[1:9]
 
-        elif ControllerDaten[0] == 1:
-            print("Nutze Controller")
+        #elif ControllerDaten[0] == 1:
+            #print("Nutze Controller")
             # print(ControllerDaten)
-            SteuerungsDaten = ControllerDaten[1:9]
+            #SteuerungsDaten = ControllerDaten[1:9]
         else:
             #print("Nutze Bildsteuerung")
             #SteuerungsDaten = BildsteuerDaten[1:9]

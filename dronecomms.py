@@ -13,9 +13,9 @@ class dronecomms(object):
         self.connected = False
         
     def connect(self):
-        
+        self.MYTELLO.connect()
         try:
-            self.MYTELLO.connect()
+
             self.connected = True
         except:
             print("Fehler connect")
