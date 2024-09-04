@@ -84,11 +84,6 @@ else:
 # -------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
 # -------------------------------------------------------------------------------------
-'''
-X=600
-Y = 600
-scrn = pygame.display.set_mode((X, Y))
-'''
 
 #vid = cv2.VideoCapture(0)
 
@@ -96,12 +91,12 @@ while running:
 
     clear()
     print(AUSGABEARRAY)
-    
+
 
     checkForExit()
 
 
-    pygame.display.flip()
+    dashboard.update()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
     # [False oder True, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
