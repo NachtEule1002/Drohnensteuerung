@@ -6,23 +6,31 @@ from PIL import Image
 import numpy
 import pygame
 
-def processImage(img):
+def processImage(img, status):
 
     #finalimg = img
 
-    img = cv2.blur(img,(5,5)) #Bild blurren gegen Rauschen
+    if status == 0:
+
+        finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")
+
+        return finalimg,[0,0,0,0,0,0,0,0,0]
+
+    elif status == 1:
+
+        img = cv2.blur(img,(5,5)) #Bild blurren gegen Rauschen
 
 
 
-    img, movex, movez, movenear = followSquare(img)
+        img, movex, movez, movenear = followSquare(img)
 
 
 
-    finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
+        finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
 
 
-    return finalimg, [1, movez, 0, movenear, movex, 0,0, 0, 0]
+        return finalimg, [1, movez, 0, movenear, movex, 0,0, 0, 0]
 
 
 def followSquare(img):

@@ -56,7 +56,7 @@ class XboxController(object):
         else:
             iscontrol = False
 
-        return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, x, y, rb, lb]
+        return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, x, y]
 
 
     def _monitor_controller(self):

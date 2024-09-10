@@ -42,7 +42,7 @@ else:
 
 running = True
 
-#controller = XBoxControl.XboxController()
+controller = XBoxControl.XboxController()
 
 
 # -------------------------------------------------------------------------------------
@@ -88,9 +88,11 @@ else:
 
 #vid = cv2.VideoCapture(0)
 
+videostatus = 0
+
 while running:
 
-    #clear()
+    clear()
     print(AUSGABEARRAY)
 
 
@@ -105,7 +107,7 @@ while running:
     KeyboardDaten = KeyboardControl.keyboardControl()
     
     
-    #ControllerDaten = controller.read()
+    ControllerDaten = controller.read()
 
     SteuerungsDaten = [0,0,0,0,0,0,0,0]
     
@@ -117,24 +119,28 @@ while running:
 
     if DROHNE_AKTIV:
         print("ANGEKOMMEN")
-        currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage())
+        currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage(),videostatus)
 
         dashboard.showImage(currentImg)
+
+        if videostatus == 0 and (ControllerDaten[7] == 1 or KeyboardDaten[7] == 1):
+            videostatus = 1
+        elif videostatus == 1 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1):
+            videostatus = 0
 
         if KeyboardDaten[0] == 1:
             print("Nutze Keyboard")
             SteuerungsDaten = KeyboardDaten[1:9]
 
-        #elif ControllerDaten[0] == 1:
-            #print("Nutze Controller")
-            # print(ControllerDaten)
-            #SteuerungsDaten = ControllerDaten[1:9]
+        elif BildsteuerDaten[0] == 1:
+
+            print("Nutze Bildsteuerung")
+            SteuerungsDaten = BildsteuerDaten[1:9]
+
         else:
-            #print("Nutze Bildsteuerung")
-            #SteuerungsDaten = BildsteuerDaten[1:9]
 
             print("Nutze Controller")
-            # print(ControllerDaten)
+            #print(ControllerDaten)
             SteuerungsDaten = ControllerDaten[1:9]
 
 
