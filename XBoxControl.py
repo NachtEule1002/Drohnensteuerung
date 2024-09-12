@@ -58,6 +58,7 @@ class XboxController(object):
 
         return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, x, y]
 
+        # A für Takeoff, B für Flip, X für Modus 1, Y für Modus 0
 
     def _monitor_controller(self):
         while True:

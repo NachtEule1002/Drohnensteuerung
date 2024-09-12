@@ -115,7 +115,7 @@ class dronecomms(object):
         if self.tookoff:
             self.MYTELLO.flip('f')
 
-    def sendcontrols(self, movementtable):
+    def sendcontrols(self,mode, movementtable):
 
         # control-standard: [up + down, rotate cw + ccw, forward + backward, right + left, takeoff + land, flip, Button3 (unassigned), Button4 (unass.)]
         # [-100 to 100, -100 to 100, -100 to 100, -100 to 100, 0 or 1, 0 or 1, 0 or 1, 0 or 1]
@@ -131,11 +131,29 @@ class dronecomms(object):
             if self.tookoff:
                 if movementtable[5] == 1:   # optional flip
                     self.flip()
+                if mode == 1: # move constantly
+                    if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:  # move drone
+                        self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
+                        self.moving = True
+                        #print("sende")
+                    elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True: # stop movement
+                        self.MYTELLO.send_rc_control(0,0,0,0)
+                        self.moving = False
 
-                if abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) > 10:  # move drone
-                    self.MYTELLO.send_rc_control(int(movementtable[3]), int(movementtable[2]), int(movementtable[0]), int(movementtable[1]))
-                    self.moving = True
-                    #print("sende")
-                elif abs(movementtable[0]) + abs(movementtable[1]) + abs(movementtable[2]) + abs(movementtable[3]) <= 10 and self.moving == True: # stop movement
-                    self.MYTELLO.send_rc_control(0,0,0,0)
-                    self.moving = False
+                elif mode == 2: # move in cm's
+                    if movementtable[0] > 0:
+                        self.MYTELLO.move_up(movementtable[0])
+                    elif movementtable[0] < 0:
+                        self.MYTELLO.move_down(movementtable[0])
+                    if movementtable[1] > 0:
+                        self.MYTELLO.rotate_clockwise(movementtable[1])
+                    elif movementtable[1] < 0:
+                        self.MYTELLO.rotate_counter_clockwise(movementtable[1])
+                    if movementtable[2] > 0:
+                        self.MYTELLO.move_forward(movementtable[2])
+                    elif movementtable[2] < 0:
+                        self.MYTELLO.move_back(movementtable[2])
+                    if movementtable[3] > 0:
+                        self.MYTELLO.move_right(movementtable[3])
+                    elif movementtable[3] < 0:
+                        self.MYTELLO.move_left(movementtable[3])

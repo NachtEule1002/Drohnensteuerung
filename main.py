@@ -131,17 +131,20 @@ while running:
         if KeyboardDaten[0] == 1:
             print("Nutze Keyboard")
             SteuerungsDaten = KeyboardDaten[1:9]
+            steuerungsmodus = 1
 
         elif BildsteuerDaten[0] == 1:
 
             print("Nutze Bildsteuerung")
-            SteuerungsDaten = BildsteuerDaten[1:9]
+            SteuerungsDaten = BildsteuerDaten[2:10]
+            steuerungsmodus = BildsteuerDaten[1]
 
         else:
 
             print("Nutze Controller")
             #print(ControllerDaten)
             SteuerungsDaten = ControllerDaten[1:9]
+            steuerungsmodus = 1
 
 
         print(SteuerungsDaten)
