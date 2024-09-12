@@ -151,6 +151,6 @@ while running:
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
-        drone.sendcontrols(SteuerungsDaten)
+        drone.sendcontrols(steuerungsmodus, SteuerungsDaten)
 
     time.sleep(1/15)
