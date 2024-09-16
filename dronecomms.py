@@ -1,5 +1,6 @@
 from djitellopy import tello
 import pygame
+import numpy
 
 class dronecomms(object):
     
@@ -142,18 +143,18 @@ class dronecomms(object):
 
                 elif mode == 2: # move in cm's
                     if movementtable[0] > 0:
-                        self.MYTELLO.move_up(movementtable[0])
+                        self.MYTELLO.move_up(abs(movementtable[0]))
                     elif movementtable[0] < 0:
-                        self.MYTELLO.move_down(movementtable[0])
+                        self.MYTELLO.move_down(abs(movementtable[0]))
                     if movementtable[1] > 0:
-                        self.MYTELLO.rotate_clockwise(movementtable[1])
+                        self.MYTELLO.rotate_clockwise(abs(movementtable[1]))
                     elif movementtable[1] < 0:
-                        self.MYTELLO.rotate_counter_clockwise(movementtable[1])
+                        self.MYTELLO.rotate_counter_clockwise(abs(movementtable[1]))
                     if movementtable[2] > 0:
-                        self.MYTELLO.move_forward(movementtable[2])
+                        self.MYTELLO.move_forward(abs(movementtable[2]))
                     elif movementtable[2] < 0:
-                        self.MYTELLO.move_back(movementtable[2])
+                        self.MYTELLO.move_back(abs(movementtable[2]))
                     if movementtable[3] > 0:
-                        self.MYTELLO.move_right(movementtable[3])
+                        self.MYTELLO.move_right(abs(movementtable[3]))
                     elif movementtable[3] < 0:
-                        self.MYTELLO.move_left(movementtable[3])
+                        self.MYTELLO.move_left(abs(movementtable[3]))

@@ -12,7 +12,7 @@ import dronecomms
 class dashboard(object):
 
     width = 1600
-    hight = 1200
+    hight = 1000
     TEXTCOLOR = (0, 0, 0)
     BACKGROUNDCOLOR = None
     CAMERAPOS = (0,0)
