@@ -43,6 +43,14 @@ class dronecomms(object):
             except:
                 print("Fehler streamo")
 
+    def takeoff(self):
+
+        if self.connected and self.tookoff == False:
+            try:
+                self.MYTELLO.takeoff()
+                self.tookoff = True
+            except:
+                print("Fehler takeoff")
     def land(self):
         
         if self.connected and self.tookoff:
@@ -78,13 +86,6 @@ class dronecomms(object):
             except:
                 print("Fehler")
 
-    def getcurrentstate(self):
-        if self.connected:
-            try:
-                return self.MYTELLO.get_current_state()
-            except:
-                print("Fehler state ")
-
     def gettemperature(self):
         if self.connected:
             try:
@@ -92,14 +93,7 @@ class dronecomms(object):
             except:
                 print("Fehler tmp")
 
-    def takeoff(self):
 
-        if self.connected and self.tookoff == False:
-            try:
-                self.MYTELLO.takeoff()
-                self.tookoff = True
-            except:
-                print("Fehler takeoff")
 
     def getImage(self):
 
