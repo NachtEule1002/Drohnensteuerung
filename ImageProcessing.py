@@ -67,7 +67,7 @@ def processImage(img, status):
 
         return finalimg, [0,1,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
-    elif status == 3: # Ball Folgen CM
+    elif status == 1: # Ball Folgen CM
 
         img = cv2.blur(img, (5, 5))  # Bild blurren gegen Rauschen
 
@@ -75,7 +75,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [1, 1, movez, 0, movenear, movex, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
     elif status == 2: # Ball folgen Absolut
 
@@ -87,7 +87,7 @@ def processImage(img, status):
 
         return finalimg, [1, 1, movez, 0, movenear, movex, 0,0, 0, 0] # Zweiter Wert ist Steuerungsmodus
 
-    elif status == 1: #GESICHTSERKENNUNG
+    elif status == 3: #GESICHTSERKENNUNG
 
         img, rotation = RotateFace(img)
 
@@ -101,9 +101,11 @@ def followBallAbsolute(img):
     hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
     lower = (35,30,40)      #fixHSVRange(135,20,20
-    upper = (55,255,253)    #fixHSVRange(190,100,100)
+    upper = (90,255,253)    #fixHSVRange(190,100,100)
 
     mask = cv2.inRange(hsv_img, lower, upper)
+
+    height, width = img.shape[:2]
 
     contours, hierarchy = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 
@@ -113,7 +115,7 @@ def followBallAbsolute(img):
 
     if len(contours) > 0:
         c = max(contours,key = cv2.contourArea)
-        if len(c) > 5 and c.size > 400:
+        if len(c) > 5 and c.size > 700:
             cv2.drawContours(img,c,-1,(0,0,255),1)
 
             #M = cv2.moments(c)
@@ -132,8 +134,8 @@ def followBallAbsolute(img):
             cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2,
                         cv2.LINE_AA)
 
-            diffx = -(int(img.shape[1] / 2) - curx)
-            diffy = -(int(img.shape[0] / 2) - cury)
+            diffx = -(int(width / 2) - curx)
+            diffy = -(int(height / 2) - cury)
 
             cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury) + "; diffx: "+ str(diffx) + "; diffy: " + str(diffy), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (0, 0, 255), 2,
@@ -214,19 +216,21 @@ def followBallCM(img):
     hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
     lower = (35,30,40)      #fixHSVRange(135,20,20)
-    upper = (55,255,253)    #fixHSVRange(190,100,100)
+    upper = (90,255,253)    #fixHSVRange(190,100,100)
+
+    height, width = img.shape[:2]
 
     mask = cv2.inRange(hsv_img, lower, upper)
 
     contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
-    movex = 0
-    movez = 0
+    diff_x_cm = 0
+    diff_y_cm = 0
     movenear = 0
 
     if len(contours) > 0:
         c = max(contours, key=cv2.contourArea)
-        if len(c) > 5 and c.size > 400:
+        if len(c) > 5 and c.size > 700:
             cv2.drawContours(img, c, -1, (0, 0, 255), 1)
 
             rct = cv2.fitEllipse(c)
@@ -239,8 +243,8 @@ def followBallCM(img):
                         (0, 0, 255), 2,
                         cv2.LINE_AA)
 
-            diffx = -(int(img.shape[1] / 2) - curx)
-            diffy = -(int(img.shape[0] / 2) - cury)
+            diffx = (int(width / 2) - curx)
+            diffy = (int(height / 2) - cury)
 
             cv2.putText(img,
                         "x: " + str(curx) + "; y: " + str(cury) + "; diffx: " + str(diffx) + "; diffy: " + str(diffy),
@@ -256,7 +260,24 @@ def followBallCM(img):
 
             # HIER NOCH BEWEGUNG EINFÜGEN
 
+            max_dist_x = (-0.021*size) + 65
+            max_dist_y = max_dist_x * (height/width)
 
+            #print("max Dist x: "+str(max_dist_x))
+
+            movemindiff = 20
+
+            diff_x_cm = -round((diffx / width) * max_dist_x)
+            diff_y_cm = round((diffy / height) * max_dist_y)
+
+            if abs(diff_x_cm) < movemindiff:
+                diff_x_cm = 0
+            if abs(diff_y_cm) < movemindiff:
+                diff_y_cm = 0
+
+
+
+    return img, diff_x_cm,diff_y_cm,0
 
 def RotateFace(img):
     rotation = 0

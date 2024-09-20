@@ -137,8 +137,10 @@ class dronecomms(object):
 
                 elif mode == 2: # move in cm's
                     if movementtable[0] > 0:
+                        print("hoch")
                         self.MYTELLO.move_up(abs(movementtable[0]))
                     elif movementtable[0] < 0:
+                        print("runter")
                         self.MYTELLO.move_down(abs(movementtable[0]))
                     if movementtable[1] > 0:
                         self.MYTELLO.rotate_clockwise(abs(movementtable[1]))
@@ -149,6 +151,8 @@ class dronecomms(object):
                     elif movementtable[2] < 0:
                         self.MYTELLO.move_back(abs(movementtable[2]))
                     if movementtable[3] > 0:
+                        print("rechts")
                         self.MYTELLO.move_right(abs(movementtable[3]))
                     elif movementtable[3] < 0:
+                        print("links")
                         self.MYTELLO.move_left(abs(movementtable[3]))
