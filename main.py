@@ -123,10 +123,20 @@ while running:
 
         dashboard.showImage(currentImg)
 
-        if videostatus == 0 and (ControllerDaten[7] == 1 or KeyboardDaten[7] == 1):
-            videostatus = 1
-        elif videostatus == 1 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1):
+        # Hier abfragen, damit Bildsteuerung überstimmt wird
+        if videostatus != 0 and (ControllerDaten[7] == 1 or KeyboardDaten[7] == 1):
             videostatus = 0
+        elif videostatus != 1 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1):
+            videostatus = 1
+        elif videostatus != 2 and (ControllerDaten[9] == 1 or KeyboardDaten[9] == 1):
+            videostatus = 2
+        elif videostatus != 3 and (ControllerDaten[10] == 1 or KeyboardDaten[10] == 1):
+            videostatus = 3
+        elif videostatus != 4 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1):
+            videostatus = 4
+
+        print("Videostatus: " + str(videostatus))
+
 
         if KeyboardDaten[0] == 1:
             print("Nutze Keyboard")
@@ -151,6 +161,6 @@ while running:
 
         print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
-        drone.sendcontrols(steuerungsmodus, SteuerungsDaten)
+        drone.sendcontrols(steuerungsmodus, SteuerungsDaten[0:6])
 
     time.sleep(1/15)

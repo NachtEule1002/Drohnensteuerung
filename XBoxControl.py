@@ -24,10 +24,9 @@ class XboxController(object):
         self.RightThumb = 0
         self.Back = 0
         self.Start = 0
-        self.LeftDPad = 0
-        self.RightDPad = 0
-        self.UpDPad = 0
-        self.DownDPad = 0
+        self.PadUD = 0
+        self.PadLR = 0
+
 
         self._monitor_thread = threading.Thread(target=self._monitor_controller, args=())
         self._monitor_thread.daemon = True
@@ -46,17 +45,39 @@ class XboxController(object):
         y = round(self.Y, 2)
         rb = round(self.RightBumper, 2)
         lb = round(self.LeftBumper, 2)
+        padleftright = round(self.PadLR, 2)
+        padupdown = round(self.PadUD, 2)
 
         # control-standard: [True or False, up + down, rotate cw + ccw, forward + backward, right + left, takeoff + land, flip, Button3 (unass.), Button4 (unass.)]
         # [-100 to 100, -100 to 100, -100 to 100, -100 to 100, 0 or 1, 0 or 1, 0 or 1, 0 or 1]
 
 
-        if abs(xl)+abs(yl)+abs(xr)+abs(yr)+a+b+rb+lb+a+b+x+y > 0: # check, if something is pressed on the controller
+        if abs(xl)+abs(yl)+abs(xr)+abs(yr)+a+b+rb+lb+a+b+x+y+abs(padupdown)+abs(padleftright) > 0: # check, if something is pressed on the controller
             iscontrol = True
         else:
             iscontrol = False
 
-        return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, x, y]
+        if padupdown == 1:
+            padup = 0
+            paddown = 1
+        elif padupdown == -1:
+            padup = 1
+            paddown = 0
+        else:
+            padup = 0
+            paddown = 0
+
+        if padleftright == 1:
+            padleft = 0
+            padright = 1
+        elif padleftright == -1:
+            padleft = 1
+            padright = 0
+        else:
+            padleft = 0
+            padright = 0
+
+        return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, y, padup, padright, paddown, padleft]
 
         # A für Takeoff, B für Flip, X für Modus 1, Y für Modus 0
 
@@ -96,11 +117,7 @@ class XboxController(object):
                     self.Back = event.state
                 elif event.code == 'BTN_START':
                     self.Start = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY1':
-                    self.LeftDPad = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY2':
-                    self.RightDPad = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY3':
-                    self.UpDPad = event.state
-                elif event.code == 'BTN_TRIGGER_HAPPY4':
-                    self.DownDPad = event.state
+                elif event.code == 'ABS_HAT0Y':
+                    self.PadUD = event.state
+                elif event.code == 'ABS_HAT0X':
+                    self.PadLR = event.state

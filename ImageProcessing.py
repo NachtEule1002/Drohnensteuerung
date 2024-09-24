@@ -19,9 +19,9 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")
 
-        return finalimg,[0,1,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg,[0,1,0,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
-    elif status == 3: # FARBCHECK
+    elif status == 5: # FARBCHECK
 
         img = cv2.GaussianBlur(img, (5, 5), 5)  # Bild blurren gegen Rauschen
 
@@ -65,7 +65,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [0,1,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [0,1,0,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
     elif status == 1: # Ball Folgen CM
 
@@ -75,7 +75,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
     elif status == 2: # Ball folgen Absolut
 
@@ -85,7 +85,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [1, 1, movez, 0, movenear, movex, 0,0, 0, 0] # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 1, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0] # Zweiter Wert ist Steuerungsmodus
 
     elif status == 3: #GESICHTSERKENNUNG
 
@@ -93,10 +93,10 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")
 
-        return finalimg, [1, 1, 0, rotation * 2, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 1, 0, rotation * 2, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
 
-def followBallAbsolute(img):
+def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
 
     hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
@@ -115,7 +115,7 @@ def followBallAbsolute(img):
 
     if len(contours) > 0:
         c = max(contours,key = cv2.contourArea)
-        if len(c) > 5 and c.size > 700:
+        if len(c) > 5 and c.size > 500:
             cv2.drawContours(img,c,-1,(0,0,255),1)
 
             #M = cv2.moments(c)
@@ -149,7 +149,7 @@ def followBallAbsolute(img):
             movemindiff = 30
             movemaxscalediff = 200
             movescalestart = 20
-            movemaxspeed = 30
+            movemaxspeed = 20
 
             if diffx > movemindiff:
 
@@ -182,7 +182,7 @@ def followBallAbsolute(img):
             sizemindiff = 40
             sizemaxscalediff = 200
             sizescalestart = 20
-            sizemaxspeed = 40
+            sizemaxspeed = 10
 
             sizediff = c.size - sizemiddle
 
@@ -209,7 +209,7 @@ def followBallAbsolute(img):
 
     cv2.imshow("Red",img)
 
-    return img, movex, movez, movenear
+    return img, round(movex), round(movez), round(movenear)
 
 
 def followBallCM(img):

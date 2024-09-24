@@ -6,7 +6,7 @@ def keyboardControl():
 
     # Tastenbelegung und -abfrage
 
-    eingabe, ud, yv, fb, rl, start, land, mod1, mod2 = False, 0, 0, 0, 0, 0, 0, 0, 0
+    eingabe, ud, yv, fb, rl, start, flip, modaus, mod1, mod2, mod3, mod4 = False, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     gedrueckt = pygame.key.get_pressed()
     if gedrueckt[pygame.K_UP]:
         ud = 100
@@ -35,14 +35,23 @@ def keyboardControl():
     if gedrueckt[pygame.K_e]:
         start = 1
         eingabe = True
-    elif gedrueckt[pygame.K_q]:
-        land = 1
+    elif gedrueckt[pygame.K_f]:
+        flip = 1
         eingabe = True
     if gedrueckt[pygame.K_1]:
-        mod1 = 1
+        modaus = 1
         eingabe = True
     elif gedrueckt[pygame.K_2]:
+        mod1 = 1
+        eingabe = True
+    elif gedrueckt[pygame.K_3]:
         mod2 = 1
         eingabe = True
-    return [eingabe, ud, yv, fb, rl, start, land, mod1, mod2]
+    elif gedrueckt[pygame.K_4]:
+        mod3 = 1
+        eingabe = True
+    elif gedrueckt[pygame.K_5]:
+        mod4 = 1
+        eingabe = True
+    return [eingabe, ud, yv, fb, rl, start, flip, modaus, mod1, mod2, mod3, mod4]
     
