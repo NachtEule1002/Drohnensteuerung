@@ -67,7 +67,18 @@ def processImage(img, status):
 
         return finalimg, [0,1,0,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
-    elif status == 1: # Ball Folgen CM
+
+    elif status == 1: # Ball folgen Absolut
+
+        img = cv2.blur(img,(5,5)) #Bild blurren gegen Rauschen
+
+        img, movex, movez, movenear = followBallAbsolute(img)
+
+        finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
+
+        return finalimg, [1, 1, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0] # Zweiter Wert ist Steuerungsmodus
+
+    elif status == 2:  # Ball Folgen CM
 
         img = cv2.blur(img, (5, 5))  # Bild blurren gegen Rauschen
 
@@ -77,15 +88,6 @@ def processImage(img, status):
 
         return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
-    elif status == 2: # Ball folgen Absolut
-
-        img = cv2.blur(img,(5,5)) #Bild blurren gegen Rauschen
-
-        img, movex, movez, movenear = followBallAbsolute(img)
-
-        finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
-
-        return finalimg, [1, 1, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0] # Zweiter Wert ist Steuerungsmodus
 
     elif status == 3: #GESICHTSERKENNUNG
 
@@ -100,114 +102,79 @@ def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
 
     hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
-    lower = (35,30,40)      #fixHSVRange(135,20,20
-    upper = (90,255,253)    #fixHSVRange(190,100,100)
-
-    mask = cv2.inRange(hsv_img, lower, upper)
-
-    height, width = img.shape[:2]
-
-    contours, hierarchy = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
-
     movex = 0
     movez = 0
     movenear = 0
 
-    if len(contours) > 0:
-        c = max(contours,key = cv2.contourArea)
-        if len(c) > 5 and c.size > 500:
-            cv2.drawContours(img,c,-1,(0,0,255),1)
+    diffx, diffy, size = getBallPos(hsv_img) #Position des Balls
 
-            #M = cv2.moments(c)
+    diffx = -diffx  #Werte für Verarbeitung in diesem Modus invertieren
+    diffy = -diffy
 
-            #x = int(M["m10"]/(M["m00"]+0.01))
-            #y = int(M["m01"]/(M["m00"]+0.01))
+    # Skalierungswerte für seitliche Ball-Bewegung
+    movemindiff = 30
+    movemaxscalediff = 200
+    movescalestart = 20
+    movemaxspeed = 20
 
-            #cv2.putText(img,"x: " + str(x) + "; y: " + str(y),(50,50),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),2,cv2.LINE_AA)
+    if diffx > movemindiff:
 
-            rct = cv2.fitEllipse(c)
-            cv2.ellipse(img,rct,(0,0,255),3)
+        if diffx < movemaxscalediff:
+            movex = (movemaxspeed/(movemaxscalediff - movescalestart)) * diffx - movescalestart*(movemaxspeed/(movemaxscalediff - movescalestart))
+        else:
+            movex = movemaxspeed
 
-            curx = int(rct[0][0])
-            cury = int(rct[0][1])
+    elif diffx < -movemindiff:
+        if abs(diffx) < movemaxscalediff:
+            movex = -((movemaxspeed / (movemaxscalediff - movescalestart)) * abs(diffx) - movescalestart * (movemaxspeed / (movemaxscalediff - movescalestart)))
+        else:
+            movex = -movemaxspeed
 
-            cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2,
-                        cv2.LINE_AA)
+    if diffy > movemindiff:
+        if diffy < movemaxscalediff:
+            movez = -(movemaxspeed / (movemaxscalediff - movescalestart)) * diffy - movescalestart * (
+                        movemaxspeed / (movemaxscalediff - movescalestart))
+        else:
+            movez = -movemaxspeed
 
-            diffx = -(int(width / 2) - curx)
-            diffy = -(int(height / 2) - cury)
+    elif diffy < -movemindiff:
+        if abs(diffy) < movemaxscalediff:
+            movez = ((movemaxspeed / (movemaxscalediff - movescalestart)) * abs(diffy) - movescalestart * (
+                        movemaxspeed / (movemaxscalediff - movescalestart)))
+        else:
+            movez = movemaxspeed
 
-            cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury) + "; diffx: "+ str(diffx) + "; diffy: " + str(diffy), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
-            cv2.putText(img,
-                        "Flaeche: " + str(c.size),
-                        (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
+    # Skalierungswerte für Ball-Entfernung
+    sizemiddle = 750
+    sizemindiff = 40
+    sizemaxscalediff = 200
+    sizescalestart = 20
+    sizemaxspeed = 10
 
-            movemindiff = 30
-            movemaxscalediff = 200
-            movescalestart = 20
-            movemaxspeed = 20
+    sizediff = size - sizemiddle
 
-            if diffx > movemindiff:
+    if sizediff > sizemindiff:
+        if sizediff < sizemaxscalediff:
+            movenear = -(sizemaxspeed / (sizemaxscalediff - sizescalestart)) * sizediff - sizescalestart * (
+                        sizemaxspeed / (sizemaxscalediff - sizescalestart))
+        else:
+            movenear = -sizemaxspeed
 
-                if diffx < movemaxscalediff:
-                    movex = (movemaxspeed/(movemaxscalediff - movescalestart)) * diffx - movescalestart*(movemaxspeed/(movemaxscalediff - movescalestart))
-                else:
-                    movex = movemaxspeed
+    elif sizediff < sizemindiff:
+        if abs(sizediff) < sizemaxscalediff:
+            movenear = ((sizemaxspeed / (sizemaxscalediff - sizescalestart)) * abs(sizediff) - sizescalestart * (
+                        sizemaxspeed / (sizemaxscalediff - sizescalestart)))
+        else:
+            movenear = sizemaxspeed
 
-            elif diffx < -movemindiff:
-                if abs(diffx) < movemaxscalediff:
-                    movex = -((movemaxspeed / (movemaxscalediff - movescalestart)) * abs(diffx) - movescalestart * (movemaxspeed / (movemaxscalediff - movescalestart)))
-                else:
-                    movex = -movemaxspeed
-
-            if diffy > movemindiff:
-                if diffy < movemaxscalediff:
-                    movez = -(movemaxspeed / (movemaxscalediff - movescalestart)) * diffy - movescalestart * (
-                                movemaxspeed / (movemaxscalediff - movescalestart))
-                else:
-                    movez = -movemaxspeed
-
-            elif diffy < -movemindiff:
-                if abs(diffy) < movemaxscalediff:
-                    movez = ((movemaxspeed / (movemaxscalediff - movescalestart)) * abs(diffy) - movescalestart * (
-                                movemaxspeed / (movemaxscalediff - movescalestart)))
-                else:
-                    movez = movemaxspeed
-
-            sizemiddle = 750
-            sizemindiff = 40
-            sizemaxscalediff = 200
-            sizescalestart = 20
-            sizemaxspeed = 10
-
-            sizediff = c.size - sizemiddle
-
-            if sizediff > sizemindiff:
-                if sizediff < sizemaxscalediff:
-                    movenear = -(sizemaxspeed / (sizemaxscalediff - sizescalestart)) * sizediff - sizescalestart * (
-                                sizemaxspeed / (sizemaxscalediff - sizescalestart))
-                else:
-                    movenear = -sizemaxspeed
-
-            elif sizediff < sizemindiff:
-                if abs(sizediff) < sizemaxscalediff:
-                    movenear = ((sizemaxspeed / (sizemaxscalediff - sizescalestart)) * abs(sizediff) - sizescalestart * (
-                                sizemaxspeed / (sizemaxscalediff - sizescalestart)))
-                else:
-                    movenear = sizemaxspeed
-
-            cv2.putText(img,
-                        "movex: " + str(movex) + "; movez: " + str(movez) + ";movenear: " + str(movenear),
-                        (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
+    cv2.putText(img,
+                "movex: " + str(movex) + "; movez: " + str(movez) + ";movenear: " + str(movenear),
+                (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                (0, 0, 255), 2,
+                cv2.LINE_AA)
 
 
-    cv2.imshow("Red",img)
+    #cv2.imshow("Red",img)
 
     return img, round(movex), round(movez), round(movenear)
 
@@ -215,67 +182,32 @@ def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
 def followBallCM(img):
     hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
-    lower = (35,30,40)      #fixHSVRange(135,20,20)
-    upper = (90,255,253)    #fixHSVRange(190,100,100)
-
     height, width = img.shape[:2]
-
-    mask = cv2.inRange(hsv_img, lower, upper)
-
-    contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
     diff_x_cm = 0
     diff_y_cm = 0
     movenear = 0
 
-    if len(contours) > 0:
-        c = max(contours, key=cv2.contourArea)
-        if len(c) > 5 and c.size > 700:
-            cv2.drawContours(img, c, -1, (0, 0, 255), 1)
+    diffx, diffy, size = getBallPos(hsv_img) #Position des Balls
 
-            rct = cv2.fitEllipse(c)
-            cv2.ellipse(img, rct, (0, 0, 255), 3)
+    # HIER NOCH BEWEGUNG EINFÜGEN
 
-            curx = int(rct[0][0])
-            cury = int(rct[0][1])
+    if (diffx+diffy) > 0:
 
-            cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
+        max_dist_x = (-0.021*size) + 65
+        max_dist_y = max_dist_x * (height/width)
 
-            diffx = (int(width / 2) - curx)
-            diffy = (int(height / 2) - cury)
+        #print("max Dist x: "+str(max_dist_x))
 
-            cv2.putText(img,
-                        "x: " + str(curx) + "; y: " + str(cury) + "; diffx: " + str(diffx) + "; diffy: " + str(diffy),
-                        (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
-            cv2.putText(img, "Flaeche: " + str(c.size),
-                        (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
+        movemindiff = 20
 
-            size = c.size
+        diff_x_cm = -round((diffx / width) * max_dist_x)
+        diff_y_cm = round((diffy / height) * max_dist_y)
 
-            # HIER NOCH BEWEGUNG EINFÜGEN
-
-            max_dist_x = (-0.021*size) + 65
-            max_dist_y = max_dist_x * (height/width)
-
-            #print("max Dist x: "+str(max_dist_x))
-
-            movemindiff = 20
-
-            diff_x_cm = -round((diffx / width) * max_dist_x)
-            diff_y_cm = round((diffy / height) * max_dist_y)
-
-            if abs(diff_x_cm) < movemindiff:
-                diff_x_cm = 0
-            if abs(diff_y_cm) < movemindiff:
-                diff_y_cm = 0
-
-
+        if abs(diff_x_cm) < movemindiff:
+            diff_x_cm = 0
+        if abs(diff_y_cm) < movemindiff:
+            diff_y_cm = 0
 
     return img, diff_x_cm,diff_y_cm,0
 
@@ -301,6 +233,58 @@ def RotateFace(img):
         rotation = 0
 
     return img, rotation
+
+def getBallPos(img):
+
+    diffx = 0
+    diffy = 0
+    size = 0
+
+    lower = (35, 30, 40)  # fixHSVRange(135,20,20
+    upper = (90, 255, 253)  # fixHSVRange(190,100,100)
+
+    height, width = img.shape[:2]
+
+    mask = cv2.inRange(img, lower, upper)
+
+    contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    if len(contours) > 0:
+        c = max(contours, key=cv2.contourArea)
+        if len(c) > 5 and c.size > 500:
+            cv2.drawContours(img, c, -1, (0, 0, 255), 1)
+
+            rct = cv2.fitEllipse(c)
+            cv2.ellipse(img, rct, (0, 0, 255), 3)
+
+            curx = int(rct[0][0])
+            cury = int(rct[0][1])
+
+            cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (0, 0, 255), 2,
+                        cv2.LINE_AA)
+
+            diffx = (int(width / 2) - curx)
+            diffy = (int(height / 2) - cury)
+
+            cv2.putText(img,
+                        "x: " + str(curx) + "; y: " + str(cury) + "; diffx: " + str(diffx) + "; diffy: " + str(diffy),
+                        (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (0, 0, 255), 2,
+                        cv2.LINE_AA)
+            cv2.putText(img,
+                        "Flaeche: " + str(c.size),
+                        (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (0, 0, 255), 2,
+                        cv2.LINE_AA)
+
+            size = c.size
+
+    return diffx, diffy, size
+
+#def getFacePos(img):
+
+
 
 
 def fixHSVRange(h, s, v):
