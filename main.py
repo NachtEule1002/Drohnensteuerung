@@ -75,7 +75,14 @@ else:
 
 videostatus = 0
 
+count = 0
+height = 0
+bat = 0
+temp = 0
+
 while running:
+
+    count = count + 1
 
     clear()
     print(AUSGABEARRAY)
@@ -101,7 +108,14 @@ while running:
 
         currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage(),videostatus)
 
-        dashboard.loadall(currentImg, drone.getheight(), drone.getBattery(), drone.gettemperature())
+        if count > 15:
+            height = drone.getheight()
+            bat = drone.getBattery()
+            temp = drone.gettemperature()
+            count = 0
+
+
+        dashboard.loadall(currentImg, height, bat, temp)#drone.getheight(), drone.getBattery(), drone.gettemperature())
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
