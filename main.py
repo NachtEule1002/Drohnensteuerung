@@ -157,4 +157,9 @@ while running:
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(steuerungsmodus, SteuerungsDaten[0:6])
 
-    time.sleep(1/30)
+
+
+
+
+
+    time.sleep(1/15)
