@@ -115,7 +115,7 @@ while running:
             count = 0
 
 
-        dashboard.loadall(currentImg, height, bat, temp)#drone.getheight(), drone.getBattery(), drone.gettemperature())
+        dashboard.loadall(currentImg, height, bat, temp, videostatus)
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird

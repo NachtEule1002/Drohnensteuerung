@@ -110,7 +110,7 @@ class Dashboard(object):
             print("TAKEOFF")
 
 
-    def loadall(self, img, height, battery, temperature):       #neuer parameter: videostatus
+    def loadall(self, img, height, battery, temperature, videostatus):       #neuer parameter: videostatus
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         Dashboard.checkforevent(self)
         Dashboard.checkbuttons(self)
@@ -148,7 +148,7 @@ class Dashboard(object):
 
         pygame.display.flip()
 
-        #return videostatus
+        return videostatus
 
 
 class Button:
