@@ -48,21 +48,6 @@ controller = XBoxControl.XboxController()
 # -------------------------------------------------------------------------------------
 # METHODEN
 # -------------------------------------------------------------------------------------
-            
-# Exit
-
-def checkForExit():   
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            global running
-            pygame.quit()
-            if DROHNE_AKTIV:
-                drone.land()
-            running = False
-            print("EXIT")
-            sys.exit()
-
-    
     
 
 # Ausgabefenster clearen:
@@ -76,10 +61,10 @@ if DROHNE_AKTIV: # Nur wenn Drohne aktiv
     drone.connect()
     drone.getBattery()
     drone.streamon()
-    dashboard = dashboard.dashboard(drone)
+    dashboard = dashboard.Dashboard(drone)
 
 else:
-    dashboard = dashboard.dashboard(False)
+    dashboard = dashboard.Dashboard(False)
     print("Drohne schallert")
 
 # -------------------------------------------------------------------------------------
@@ -95,11 +80,6 @@ while running:
     clear()
     print(AUSGABEARRAY)
 
-
-    checkForExit()
-
-
-    dashboard.update()
 
     # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
     # [False oder True, Modus, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
@@ -118,10 +98,11 @@ while running:
     #currentImg = ImageProcessing.processImage(frame)
 
     if DROHNE_AKTIV:
-        print("ANGEKOMMEN")
+
         currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage(),videostatus)
 
-        dashboard.showImage(currentImg)
+        dashboard.loadall(currentImg, drone.getheight(), drone.getBattery(), drone.gettemperature())
+
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
         if videostatus != 0 and (ControllerDaten[7] == 1 or KeyboardDaten[7] == 1):
@@ -159,8 +140,7 @@ while running:
 
         print(SteuerungsDaten)
 
-        print("Batterie-Ladestand: " + str(drone.getBattery()) + "%")
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(steuerungsmodus, SteuerungsDaten[0:6])
 
-    time.sleep(1/15)
+    time.sleep(1/30)
