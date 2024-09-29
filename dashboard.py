@@ -2,20 +2,20 @@
 # Hier KLASSE!!!!
 #---------------------------------------------------
 
-
 import pygame
 import sys
-import dronecomms
 
 
-
-class Dashboard(object):
+class Dashboard:
 
     TEXTCOLOR = (0, 0, 0)
     TEXTBACKGROUNDCOLOR = (255, 255, 255)
     MARGINCOLOR = (0, 0, 0)
     BACKGROUNDCOLOR = (115, 179, 189)
     MARGIN = 5
+
+    #Drohne nicht verbunden
+    NODRONEPOS = 100 , 100
 
     #GRAPHICS
     #Camera
@@ -47,9 +47,7 @@ class Dashboard(object):
     BUTTONTAKEOFFPOS = 1100, 1100
 
     # Fenster erstellen und starten
-    def __init__(self, droneobject):
-        if droneobject != False:
-            self.drone = droneobject
+    def __init__(self,drone):
         pygame.init()                                          
         window = pygame.display.get_desktop_sizes()
         window = window[0]
@@ -59,7 +57,14 @@ class Dashboard(object):
         pygame.display.set_caption("Dashboard Drohnensteuerung")
         self.FONT = pygame.font.SysFont("bahnschrift", 40, False, False)
 
-        
+        #Keine Drohne verbunden
+        if not drone:
+            while True:
+                Dashboard.checkforexit(self)
+                self.screen.fill(Dashboard.BACKGROUNDCOLOR)
+                self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
+                pygame.display.flip()
+
 
 
         #EXTRA AREAS
@@ -77,8 +82,7 @@ class Dashboard(object):
         self.buttontakeoff = Button("Takeoff", Dashboard.BUTTONTAKEOFFPOS[0], Dashboard.BUTTONTAKEOFFPOS[1])
 
 
-
-    def checkforevent(self):
+    def checkforexit(self):
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -112,7 +116,7 @@ class Dashboard(object):
 
     def loadall(self, img, height, battery, temperature, videostatus):       #neuer parameter: videostatus
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
-        Dashboard.checkforevent(self)
+        Dashboard.checkforexit(self)
         Dashboard.checkbuttons(self)
 
 
@@ -151,7 +155,7 @@ class Dashboard(object):
         return videostatus
 
 
-class Button:
+class Button():
 
     MARGIN = 5
     TEXTCOLOR = (0, 0, 0)

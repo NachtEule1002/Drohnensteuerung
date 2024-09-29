@@ -59,13 +59,10 @@ clear = lambda: os.system('cls' if os.name=='nt' else 'clear') #direkt für Wind
 if DROHNE_AKTIV: # Nur wenn Drohne aktiv
     drone = dronecomms.dronecomms()
     drone.connect()
-    drone.getBattery()
     drone.streamon()
-    dashboard = dashboard.Dashboard(drone)
-
+    dashboard = dashboard.Dashboard(True)
 else:
     dashboard = dashboard.Dashboard(False)
-    print("Drohne schallert")
 
 # -------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
