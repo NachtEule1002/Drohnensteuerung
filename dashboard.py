@@ -155,7 +155,7 @@ class Dashboard:
         return videostatus
 
 
-class Button():
+class Button:
 
     MARGIN = 5
     TEXTCOLOR = (0, 0, 0)
