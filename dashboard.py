@@ -1,5 +1,4 @@
-# Dashboard über Pygame realisieren
-# Hier KLASSE!!!!
+# DASHBOARD
 #---------------------------------------------------
 
 import pygame
@@ -13,38 +12,52 @@ class Dashboard:
     MARGINCOLOR = (0, 0, 0)
     BACKGROUNDCOLOR = (115, 179, 189)
     MARGIN = 5
+    VERTICALELEMENTDISTANCE = 70
 
     #Drohne nicht verbunden
     NODRONEPOS = 100 , 100
 
-    #GRAPHICS
+
     #Camera
     CAMERAPOS = 10, 10
-    CAMERA = 960, 720
+    CAMERAAREA = 960, 720
     CAMERATITLE = "Kamerabild"
 
-    #Status
+    #STATUS
     STATUSPOS = 1000, 10
     STATUSAREA = 420, 400
-    STATUSDISTANCE = 70
 
     #Battery
-    BATTERYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + STATUSDISTANCE
+    BATTERYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + VERTICALELEMENTDISTANCE
 
     #Height
-    HEIGHTPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 2*STATUSDISTANCE
+    HEIGHTPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 2*VERTICALELEMENTDISTANCE
 
     #Temperature
-    TEMPERATUREPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 3*STATUSDISTANCE
+    TEMPERATUREPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 3*VERTICALELEMENTDISTANCE
+
+    #MODUS
+    MODUSPOS = 1000, 450
+    MODUSAREA = 420, 400
+
+
+    #BUTTONS
+    #Button Freier Modus
+    FREIERMODUSPOS = MODUSPOS[0] + 20, MODUSPOS[1] + VERTICALELEMENTDISTANCE
+    #Button Ball folgen (Absolut)
+    BALLFOLGENABSOLUTPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 2*VERTICALELEMENTDISTANCE
+    #Button Ball folgen (cm)
+    BALLVERFOLGENCMPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 3*VERTICALELEMENTDISTANCE
+    #Button Gesichtserkennung
+    GESICHTSERKENNUNGPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 4*VERTICALELEMENTDISTANCE
+
+
 
     #Max Resolution
     MAXRESOLUTION = 1920, 1080
 
-    #BUTTONS
-    mousepos = 0, 0
-    mousepressed = False
-    #Button Takeoff
-    BUTTONTAKEOFFPOS = 1100, 1100
+
+
 
     # Fenster erstellen und starten
     def __init__(self,drone):
@@ -69,17 +82,26 @@ class Dashboard:
 
         #EXTRA AREAS
         #Camera
-        self.cameraarea = pygame.Rect(Dashboard.CAMERAPOS[0]-Dashboard.MARGIN, Dashboard.CAMERAPOS[1]-Dashboard.MARGIN, Dashboard.CAMERA[0]+2*Dashboard.MARGIN, Dashboard.CAMERA[1]+2*Dashboard.MARGIN)
+        self.cameraarea = pygame.Rect(Dashboard.CAMERAPOS[0]-Dashboard.MARGIN, Dashboard.CAMERAPOS[1]-Dashboard.MARGIN, Dashboard.CAMERAAREA[0]+2*Dashboard.MARGIN, Dashboard.CAMERAAREA[1]+2*Dashboard.MARGIN)
 
         #Status
         self.statusarea = pygame.Rect(Dashboard.STATUSPOS[0]-Dashboard.MARGIN, Dashboard.STATUSPOS[1]-Dashboard.MARGIN, Dashboard.STATUSAREA[0]+2*Dashboard.MARGIN, Dashboard.STATUSAREA[1]+2*Dashboard.MARGIN)
+
+        #Modus
+        self.modusarea = pygame.Rect(Dashboard.MODUSPOS[0]-Dashboard.MARGIN, Dashboard.MODUSPOS[1]-Dashboard.MARGIN, Dashboard.MODUSAREA[0]+2*Dashboard.MARGIN, Dashboard.MODUSAREA[1]+2*Dashboard.MARGIN)
 
         #Max Resolution
         self.maxresolution = pygame.Rect(Dashboard.MAXRESOLUTION[0], 0, 10, Dashboard.MAXRESOLUTION[1])
 
         #BUTTONS
-        #Button Takeoff
-        self.buttontakeoff = Button("Takeoff", Dashboard.BUTTONTAKEOFFPOS[0], Dashboard.BUTTONTAKEOFFPOS[1])
+        #Button Freier Modus
+        self.freiermodus = Button("Freier Modus", Dashboard.FREIERMODUSPOS[0], Dashboard.FREIERMODUSPOS[1])
+        #Button Ball folgen (Absolut)
+        self.ballfolgenabsolut = Button("Ball folgen (Absolut)", Dashboard.BALLFOLGENABSOLUTPOS[0], Dashboard.BALLFOLGENABSOLUTPOS[1])
+        #Button Ball folgen (cm)
+        self.ballfolgencm = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENCMPOS[0], Dashboard.BALLVERFOLGENCMPOS[1])
+        #Button Gesichtserkennung
+        self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
 
 
     def checkforexit(self):
@@ -109,20 +131,23 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
-    def checkbuttons(self):
-        if self.buttontakeoff.ispressed():
-            print("TAKEOFF")
+    def checkbuttons(self, videostatus):
+        if self.freiermodus.ispressed():
+            videostatus = 0
+        elif self.ballfolgenabsolut.ispressed():
+            videostatus = 1
+        elif self.ballfolgencm.ispressed():
+            videostatus = 2
+        elif self.gesichtserkennung.ispressed():
+            videostatus = 3
+        return videostatus
 
 
     def loadall(self, img, height, battery, temperature, videostatus):       #neuer parameter: videostatus
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         Dashboard.checkforexit(self)
-        Dashboard.checkbuttons(self)
+        videostatus = Dashboard.checkbuttons(self, videostatus)
 
-
-        #if Dashboard.mousepos[0] >= Dashboard.BUTTONTAKEOFFPOS[0] and Dashboard.mousepos[0] <= (Dashboard.BUTTONTAKEOFFPOS[0]+100) and Dashboard.mousepos[1] >= Dashboard.BUTTONTAKEOFFPOS[1] and Dashboard.mousepos[1] <= (Dashboard.BUTTONTAKEOFFPOS[1]+100):
-        # print("TAKEOFF")
-        #Dashboard.mousepos = 0, 0
 
         #GRAPHICS
         #Camera
@@ -130,12 +155,12 @@ class Dashboard:
         self.screen.blit(img, Dashboard.CAMERAPOS)
         self.showText(Dashboard.CAMERATITLE, Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1], Dashboard.MARGIN)
 
-        #Battery
-        self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1], Dashboard.MARGIN)
-
         #Status
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.statusarea, Dashboard.MARGIN)
         self.showText("STATUS", Dashboard.STATUSPOS[0], Dashboard.STATUSPOS[1], Dashboard.MARGIN)
+
+        #Battery
+        self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1], Dashboard.MARGIN)
 
         #Height
         self.showText("Höhe: " + str(height) + " cm", Dashboard.HEIGHTPOS[0], Dashboard.HEIGHTPOS[1], Dashboard.MARGIN)
@@ -143,13 +168,24 @@ class Dashboard:
         #Temperature
         self.showText("Temperatur: " + str(temperature) + " °C", Dashboard.TEMPERATUREPOS[0], Dashboard.TEMPERATUREPOS[1], Dashboard.MARGIN)
 
-        #Max Resolution
-        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.maxresolution)
+        #Modus
+        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.modusarea, Dashboard.MARGIN)
+        self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1], Dashboard.MARGIN)
 
         #BUTTONS
-        #Button Takeoff
-        self.buttontakeoff.showButton(self.screen)
+        #Button Freier Modus
+        self.freiermodus.showButton(self.screen)
+        #Button Ball folgen (Absolut)
+        self.ballfolgenabsolut.showButton(self.screen)
+        #Button Ball folgen (cm)
+        self.ballfolgencm.showButton(self.screen)
+        #Button Gesichtserkennung
+        self.gesichtserkennung.showButton(self.screen)
 
+
+
+        #Max Resolution
+        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.maxresolution)
         pygame.display.flip()
 
         return videostatus
