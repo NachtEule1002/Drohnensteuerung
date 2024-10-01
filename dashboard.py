@@ -131,7 +131,27 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
+
     def checkbuttons(self, videostatus):
+        if videostatus == 0:
+            self.freiermodus.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+        else:
+            self.freiermodus.MARGINCOLOR = Button.MARGINCOLOR
+        if videostatus == 1:
+            self.ballfolgenabsolut.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+        else:
+            self.ballfolgenabsolut.MARGINCOLOR = Button.MARGINCOLOR
+        if videostatus == 2:
+            self.ballfolgencm.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+        else:
+            self.ballfolgencm.MARGINCOLOR = Button.MARGINCOLOR
+        if videostatus == 3:
+            self.gesichtserkennung.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+        else:
+            self.gesichtserkennung.MARGINCOLOR = Button.MARGINCOLOR
+
+
+
         if self.freiermodus.ispressed():
             videostatus = 0
         elif self.ballfolgenabsolut.ispressed():
@@ -195,9 +215,10 @@ class Button:
 
     MARGIN = 5
     MARGINCOLOR = (0, 0, 0)
+    HOVERMARGINCOLOR = (100, 100, 100)
+    PRESSEDMARGINCOLOR = (255, 0, 0)
     TEXTCOLOR = (0, 0, 0)
     TEXTBACKGROUNDCOLOR = (255, 255, 255)
-    HOVERTEXTBACKGROUNDCOLOR = (255, 0, 0)
 
     def __init__(self, text, x, y):
         FONT = pygame.font.SysFont("bahnschrift", 40, False, False)
@@ -214,12 +235,12 @@ class Button:
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
         if self.margin.collidepoint(mousepos):
-            self.MARGINCOLOR = Button.HOVERTEXTBACKGROUNDCOLOR
+            #self.MARGINCOLOR = Button.HOVERMARGINCOLOR
             if mousepressed and not self.pressed:
                 self.pressed = True
                 return True
-        else:
-            self.MARGINCOLOR = Button.MARGINCOLOR
+        #else:
+            #self.MARGINCOLOR = Button.MARGINCOLOR
         if not mousepressed:
             self.pressed = False
         return False
