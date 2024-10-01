@@ -194,27 +194,32 @@ class Dashboard:
 class Button:
 
     MARGIN = 5
+    MARGINCOLOR = (0, 0, 0)
     TEXTCOLOR = (0, 0, 0)
     TEXTBACKGROUNDCOLOR = (255, 255, 255)
+    HOVERTEXTBACKGROUNDCOLOR = (255, 0, 0)
 
     def __init__(self, text, x, y):
         FONT = pygame.font.SysFont("bahnschrift", 40, False, False)
-        self.button = FONT.render(text, True, Button.TEXTCOLOR, Button.TEXTBACKGROUNDCOLOR)
+        self.button = FONT.render(text, True, Button.TEXTCOLOR, self.TEXTBACKGROUNDCOLOR)
         buttonsize = pygame.font.Font.size(FONT, text)
         self.margin = pygame.Rect(x-Button.MARGIN, y-Button.MARGIN, buttonsize[0]+2*Button.MARGIN, buttonsize[1]+2*Button.MARGIN)
         self.pressed = False
 
     def showButton(self, screen):
-        pygame.draw.rect(screen, Dashboard.MARGINCOLOR, self.margin)
+        pygame.draw.rect(screen, self.MARGINCOLOR, self.margin)
         screen.blit(self.button, (self.margin.x+Button.MARGIN, self.margin.y+Button.MARGIN))
 
     def ispressed(self):
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
-        if mousepressed and not self.pressed:
-            if self.margin.collidepoint(mousepos):
+        if self.margin.collidepoint(mousepos):
+            self.MARGINCOLOR = Button.HOVERTEXTBACKGROUNDCOLOR
+            if mousepressed and not self.pressed:
                 self.pressed = True
                 return True
+        else:
+            self.MARGINCOLOR = Button.MARGINCOLOR
         if not mousepressed:
             self.pressed = False
         return False
