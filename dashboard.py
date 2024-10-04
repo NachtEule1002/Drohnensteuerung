@@ -208,7 +208,7 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.maxresolution)
         pygame.display.flip()
 
-        return videostatus
+        return videostatus, #Dashboarddaten
 
 
 class Button:

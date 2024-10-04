@@ -107,14 +107,14 @@ while running:
 
         #Geringere Aktualisierungsrate für height, battery, temperature
         count +=1
-        if count > 15:
+        if count > FPS:
             height = drone.getheight()
             battery = drone.getBattery()
             temperature = drone.gettemperature()
             count = 0
 
 
-        videostatus = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
+        videostatus, DashboardDaten = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
