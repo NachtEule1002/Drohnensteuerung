@@ -77,7 +77,7 @@ class XboxController(object):
             padleft = 0
             padright = 0
 
-        return [int(iscontrol), int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, y, padup, padright, paddown, padleft]
+        return [int(iscontrol), 1, int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, y, padup, padright, paddown, padleft]
 
         # A für Takeoff, B für Flip, X für Modus 1, Y für Modus 0
 

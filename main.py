@@ -115,15 +115,15 @@ while running:
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
-        if videostatus != 0 and (ControllerDaten[7] == 1 or KeyboardDaten[7] == 1):
+        if videostatus != 0 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1):
             videostatus = 0
-        elif videostatus != 1 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1):
+        elif videostatus != 1 and (ControllerDaten[9] == 1 or KeyboardDaten[9] == 1):
             videostatus = 1
-        elif videostatus != 2 and (ControllerDaten[9] == 1 or KeyboardDaten[9] == 1):
+        elif videostatus != 2 and (ControllerDaten[10] == 1 or KeyboardDaten[10] == 1):
             videostatus = 2
-        elif videostatus != 3 and (ControllerDaten[10] == 1 or KeyboardDaten[10] == 1):
+        elif videostatus != 3 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1):
             videostatus = 3
-        elif videostatus != 4 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1):
+        elif videostatus != 4 and (ControllerDaten[12] == 1 or KeyboardDaten[12] == 1):
             videostatus = 4
 
         print("Videostatus: " + str(videostatus))
@@ -131,29 +131,29 @@ while running:
 
         if KeyboardDaten[0] == 1:
             print("Nutze Keyboard")
-            SteuerungsDaten = KeyboardDaten[1:9]
-            steuerungsmodus = 1
+            SteuerungsDaten = KeyboardDaten[2:8]
+            steuerungsmodus = KeyboardDaten[1]
 
         #elif DashboardDaten[0] == 1:
             #print("Nutze Dashboardsteuerung")
-            #SteuerungsDaten = DashboardDaten[]
-            #steuerungsmodus = 1
+            #SteuerungsDaten = DashboardDaten[2:8]
+            #steuerungsmodus = DashboardDaten[1]
 
         elif BildsteuerDaten[0] == 1:
             print("Nutze Bildsteuerung")
-            SteuerungsDaten = BildsteuerDaten[2:10]
+            SteuerungsDaten = BildsteuerDaten[2:8]
             steuerungsmodus = BildsteuerDaten[1]
 
         else:
             print("Nutze Controller")
-            SteuerungsDaten = ControllerDaten[1:9]
-            steuerungsmodus = 1
+            SteuerungsDaten = ControllerDaten[2:8]
+            steuerungsmodus = ControllerDaten[1]
 
 
         print(SteuerungsDaten)
 
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
-        drone.sendcontrols(steuerungsmodus, SteuerungsDaten[0:6])
+        drone.sendcontrols(steuerungsmodus, SteuerungsDaten)
 
     else:
         dashboard.loadnotconnected()

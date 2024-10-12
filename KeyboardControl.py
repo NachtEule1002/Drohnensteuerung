@@ -53,5 +53,5 @@ def keyboardControl():
     elif gedrueckt[pygame.K_5]:
         mod4 = 1
         eingabe = True
-    return [int(eingabe), ud, yv, fb, rl, start, flip, modaus, mod1, mod2, mod3, mod4]
+    return [int(eingabe), 1, ud, yv, fb, rl, start, flip, modaus, mod1, mod2, mod3, mod4]
     
