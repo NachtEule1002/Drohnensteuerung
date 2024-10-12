@@ -60,7 +60,7 @@ class Dashboard:
 
 
     # Fenster erstellen und starten
-    def __init__(self,drone):
+    def __init__(self):
         pygame.init()                                          
         window = pygame.display.get_desktop_sizes()
         window = window[0]
@@ -69,14 +69,6 @@ class Dashboard:
         self.screen = pygame.display.set_mode((windowwidth-10, windowheight-70))
         pygame.display.set_caption("Dashboard Drohnensteuerung")
         self.FONT = pygame.font.SysFont("bahnschrift", 40, False, False)
-
-        #Keine Drohne verbunden
-        if not drone:
-            while True:
-                Dashboard.checkforexit(self)
-                self.screen.fill(Dashboard.BACKGROUNDCOLOR)
-                self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
-                pygame.display.flip()
 
 
 
@@ -208,7 +200,15 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.maxresolution)
         pygame.display.flip()
 
-        return videostatus, #Dashboarddaten
+        return videostatus, #DashboardDaten
+
+
+    def loadnotconnected(self):
+        Dashboard.checkforexit(self)
+        self.screen.fill(Dashboard.BACKGROUNDCOLOR)
+        self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
+        pygame.display.flip()
+
 
 
 class Button:

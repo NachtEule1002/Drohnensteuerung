@@ -45,7 +45,7 @@ else:
 running = True
 
 controller = XBoxControl.XboxController()
-
+dashboard = dashboard.Dashboard()
 
 # -------------------------------------------------------------------------------------
 # METHODEN
@@ -62,9 +62,6 @@ if DROHNE_AKTIV: # Nur wenn Drohne aktiv
     drone = dronecomms.dronecomms()
     drone.connect()
     drone.streamon()
-    dashboard = dashboard.Dashboard(True)
-else:
-    dashboard = dashboard.Dashboard(False)
 
 # -------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
@@ -156,7 +153,8 @@ while running:
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(steuerungsmodus, SteuerungsDaten[0:6])
 
-
+    else:
+        dashboard.loadnotconnected()
 
 
 
