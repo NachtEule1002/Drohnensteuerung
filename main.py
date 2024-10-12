@@ -90,7 +90,7 @@ while running:
     
     ControllerDaten = controller.read()
 
-    SteuerungsDaten = [0,0,0,0,0,0,0,0]
+    SteuerungsDaten = [0,0,0,0,0,0]
     
 
 
@@ -134,15 +134,15 @@ while running:
             SteuerungsDaten = KeyboardDaten[1:9]
             steuerungsmodus = 1
 
-        elif BildsteuerDaten[0] == 1:
-            print("Nutze Bildsteuerung")
-            SteuerungsDaten = BildsteuerDaten[2:10]
-            steuerungsmodus = BildsteuerDaten[1]
-
         #elif DashboardDaten[0] == 1:
             #print("Nutze Dashboardsteuerung")
             #SteuerungsDaten = DashboardDaten[]
             #steuerungsmodus = 1
+
+        elif BildsteuerDaten[0] == 1:
+            print("Nutze Bildsteuerung")
+            SteuerungsDaten = BildsteuerDaten[2:10]
+            steuerungsmodus = BildsteuerDaten[1]
 
         else:
             print("Nutze Controller")
