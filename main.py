@@ -25,7 +25,7 @@ DRONE_IP = '192.168.10.1'
 
 AUSGABEARRAY = []
 
-FPS = 30
+FPS = 15
 
 
 # Initialer Check, ob Drohne verbunden ist
@@ -111,7 +111,7 @@ while running:
             count = 0
 
 
-        videostatus, DashboardDaten = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
+        videostatus = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
@@ -135,15 +135,17 @@ while running:
             steuerungsmodus = 1
 
         elif BildsteuerDaten[0] == 1:
-
             print("Nutze Bildsteuerung")
             SteuerungsDaten = BildsteuerDaten[2:10]
             steuerungsmodus = BildsteuerDaten[1]
 
-        else:
+        #elif DashboardDaten[0] == 1:
+            #print("Nutze Dashboardsteuerung")
+            #SteuerungsDaten = DashboardDaten[]
+            #steuerungsmodus = 1
 
+        else:
             print("Nutze Controller")
-            #print(ControllerDaten)
             SteuerungsDaten = ControllerDaten[1:9]
             steuerungsmodus = 1
 
