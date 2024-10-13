@@ -75,10 +75,13 @@ count = 0
 height = 0
 battery = 0
 temperature = 0
+speedx = 0
+speedy = 0
+speedz = 0
 
 while running:
 
-    #clear()
+    clear()
     print(AUSGABEARRAY)
 
 
@@ -108,10 +111,13 @@ while running:
             height = drone.getheight()
             battery = drone.getBattery()
             temperature = drone.gettemperature()
+            speedx = drone.getspeed("x")
+            speedy = drone.getspeed("y")
+            speedz = -drone.getspeed("z")
             count = 0
 
 
-        DashboardDaten = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
+        DashboardDaten = dashboard.loadall(currentImg, height, battery, temperature, speedx, speedy, speedz, videostatus)
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
