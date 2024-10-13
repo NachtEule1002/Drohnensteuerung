@@ -25,7 +25,7 @@ DRONE_IP = '192.168.10.1'
 
 AUSGABEARRAY = []
 
-FPS = 15
+FPS = 30
 
 
 # Initialer Check, ob Drohne verbunden ist
@@ -78,7 +78,7 @@ temperature = 0
 
 while running:
 
-    clear()
+    #clear()
     print(AUSGABEARRAY)
 
 
@@ -111,19 +111,19 @@ while running:
             count = 0
 
 
-        videostatus = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
+        DashboardDaten = dashboard.loadall(currentImg, height, battery, temperature, videostatus)
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
-        if videostatus != 0 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1):
+        if videostatus != 0 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1 or DashboardDaten[8] == 1):
             videostatus = 0
-        elif videostatus != 1 and (ControllerDaten[9] == 1 or KeyboardDaten[9] == 1):
+        elif videostatus != 1 and (ControllerDaten[9] == 1 or KeyboardDaten[9] == 1 or DashboardDaten[9] == 1):
             videostatus = 1
-        elif videostatus != 2 and (ControllerDaten[10] == 1 or KeyboardDaten[10] == 1):
+        elif videostatus != 2 and (ControllerDaten[10] == 1 or KeyboardDaten[10] == 1 or DashboardDaten[10] == 1):
             videostatus = 2
-        elif videostatus != 3 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1):
+        elif videostatus != 3 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1 or DashboardDaten[11] == 1):
             videostatus = 3
-        elif videostatus != 4 and (ControllerDaten[12] == 1 or KeyboardDaten[12] == 1):
+        elif videostatus != 4 and (ControllerDaten[12] == 1 or KeyboardDaten[12] == 1 or DashboardDaten[12] == 1):
             videostatus = 4
 
         print("Videostatus: " + str(videostatus))
@@ -134,10 +134,10 @@ while running:
             SteuerungsDaten = KeyboardDaten[2:8]
             steuerungsmodus = KeyboardDaten[1]
 
-        #elif DashboardDaten[0] == 1:
-            #print("Nutze Dashboardsteuerung")
-            #SteuerungsDaten = DashboardDaten[2:8]
-            #steuerungsmodus = DashboardDaten[1]
+        elif DashboardDaten[0] == 1:
+            print("Nutze Dashboardsteuerung")
+            SteuerungsDaten = DashboardDaten[2:8]
+            steuerungsmodus = DashboardDaten[1]
 
         elif BildsteuerDaten[0] == 1:
             print("Nutze Bildsteuerung")

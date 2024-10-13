@@ -40,6 +40,9 @@ class Dashboard:
     MODUSPOS = 1000, 450
     MODUSAREA = 420, 400
 
+    #Control
+    CONTROLPOS = 1460, 10
+    CONTROLAREA = 420, 840
 
     #BUTTONS
     #Button Freier Modus
@@ -50,7 +53,10 @@ class Dashboard:
     BALLVERFOLGENCMPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 3*VERTICALELEMENTDISTANCE
     #Button Gesichtserkennung
     GESICHTSERKENNUNGPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 4*VERTICALELEMENTDISTANCE
-
+    # Button Starten/Landen
+    STARTENLANDENPOS = CONTROLPOS[0] + 20, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
+    #Button Flip
+    FLIPPOS = CONTROLPOS[0] + 20, CONTROLPOS[1] + 2*VERTICALELEMENTDISTANCE
 
 
     #Max Resolution
@@ -82,6 +88,9 @@ class Dashboard:
         #Modus
         self.modusarea = pygame.Rect(Dashboard.MODUSPOS[0]-Dashboard.MARGIN, Dashboard.MODUSPOS[1]-Dashboard.MARGIN, Dashboard.MODUSAREA[0]+2*Dashboard.MARGIN, Dashboard.MODUSAREA[1]+2*Dashboard.MARGIN)
 
+        #Control
+        self.controlarea = pygame.Rect(Dashboard.CONTROLPOS[0]-Dashboard.MARGIN, Dashboard.CONTROLPOS[1]-Dashboard.MARGIN, Dashboard.CONTROLAREA[0]+2*Dashboard.MARGIN, Dashboard.CONTROLAREA[1]+2*Dashboard.MARGIN)
+
         #Max Resolution
         self.maxresolution = pygame.Rect(Dashboard.MAXRESOLUTION[0], 0, 10, Dashboard.MAXRESOLUTION[1])
 
@@ -94,7 +103,10 @@ class Dashboard:
         self.ballfolgencm = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENCMPOS[0], Dashboard.BALLVERFOLGENCMPOS[1])
         #Button Gesichtserkennung
         self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
-
+        #Button Flip
+        self.flip = Button("Flip", Dashboard.FLIPPOS[0], Dashboard.FLIPPOS[1])
+        #Button Sarten/Landen
+        self.startenlanden = Button("Starten - Landen", Dashboard.STARTENLANDENPOS[0], Dashboard.STARTENLANDENPOS[1])
 
     def checkforexit(self):
         for event in pygame.event.get():
@@ -124,41 +136,57 @@ class Dashboard:
         self.screen.blit(img, (x, y))
 
 
-    def checkbuttons(self, videostatus):
-        if videostatus == 0:
+    def checkmodus(self, modus):
+
+        eingabe, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung , mod4 = False, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+        if self.freiermodus.ispressed():
+            modus = 0
+            eingabe = True
+        elif self.ballfolgenabsolut.ispressed():
+            modus = 1
+            eingabe = True
+        elif self.ballfolgencm.ispressed():
+            modus = 2
+            eingabe = True
+        elif self.gesichtserkennung.ispressed():
+            modus = 3
+            eingabe = True
+        elif self.startenlanden.ispressed():
+            start = 1
+            eingabe = True
+        elif self.flip.ispressed():
+            flip = 1
+            eingabe = True
+
+        if modus == 0:
             self.freiermodus.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+            freiermodus = 1
         else:
             self.freiermodus.MARGINCOLOR = Button.MARGINCOLOR
-        if videostatus == 1:
+        if modus == 1:
             self.ballfolgenabsolut.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+            ballfolgenabsolut = 1
         else:
             self.ballfolgenabsolut.MARGINCOLOR = Button.MARGINCOLOR
-        if videostatus == 2:
+        if modus == 2:
             self.ballfolgencm.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+            ballfolgencm = 1
         else:
             self.ballfolgencm.MARGINCOLOR = Button.MARGINCOLOR
-        if videostatus == 3:
+        if modus == 3:
             self.gesichtserkennung.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+            gesichtserkennung = 1
         else:
             self.gesichtserkennung.MARGINCOLOR = Button.MARGINCOLOR
 
+        return [int(eingabe), 1, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4]
 
 
-        if self.freiermodus.ispressed():
-            videostatus = 0
-        elif self.ballfolgenabsolut.ispressed():
-            videostatus = 1
-        elif self.ballfolgencm.ispressed():
-            videostatus = 2
-        elif self.gesichtserkennung.ispressed():
-            videostatus = 3
-        return videostatus
-
-
-    def loadall(self, img, height, battery, temperature, videostatus):       #neuer parameter: videostatus
+    def loadall(self, img, height, battery, temperature, modus):
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         Dashboard.checkforexit(self)
-        videostatus = Dashboard.checkbuttons(self, videostatus)
+        DashboardDaten = Dashboard.checkmodus(self, modus)
 
 
         #GRAPHICS
@@ -184,6 +212,10 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.modusarea, Dashboard.MARGIN)
         self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1], Dashboard.MARGIN)
 
+        #Control
+        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.controlarea, Dashboard.MARGIN)
+        self.showText("CONTROL", Dashboard.CONTROLPOS[0], Dashboard.CONTROLPOS[1], Dashboard.MARGIN)
+
         #BUTTONS
         #Button Freier Modus
         self.freiermodus.showButton(self.screen)
@@ -193,14 +225,16 @@ class Dashboard:
         self.ballfolgencm.showButton(self.screen)
         #Button Gesichtserkennung
         self.gesichtserkennung.showButton(self.screen)
-
-
+        #Button Flip
+        self.flip.showButton(self.screen)
+        #Button Flip
+        self.startenlanden.showButton(self.screen)
 
         #Max Resolution
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.maxresolution)
         pygame.display.flip()
 
-        return videostatus #DashboardDaten
+        return DashboardDaten
 
 
     def loadnotconnected(self):

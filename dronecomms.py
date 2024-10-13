@@ -108,7 +108,7 @@ class dronecomms(object):
     def flip(self):
         
         if self.tookoff:
-            self.MYTELLO.flip('f')
+            self.MYTELLO.flip_forward()
 
     def sendcontrols(self,mode, movementtable):
 
