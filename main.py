@@ -117,7 +117,7 @@ while running:
             count = 0
 
 
-        DashboardDaten = dashboard.loadall(currentImg, height, battery, temperature, speedx, speedy, speedz, videostatus)
+        DashboardDaten = dashboard.loadAll(currentImg, height, battery, temperature, speedx, speedy, speedz, videostatus)
 
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
@@ -162,7 +162,7 @@ while running:
         drone.sendcontrols(steuerungsmodus, SteuerungsDaten)
 
     else:
-        dashboard.loadnotconnected()
+        dashboard.loadNotConnected()
 
 
 

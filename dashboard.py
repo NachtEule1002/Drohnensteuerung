@@ -110,7 +110,7 @@ class Dashboard:
         #Button Sarten/Landen
         self.startenlanden = Button("Starten - Landen", Dashboard.STARTENLANDENPOS[0], Dashboard.STARTENLANDENPOS[1])
 
-    def checkforexit(self):
+    def checkForExit(self):
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -138,26 +138,26 @@ class Dashboard:
         self.screen.blit(img, (x, y))
 
 
-    def checkbutton(self, modus):
+    def checkButton(self, modus):
 
         eingabe, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4 = False, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-        if self.freiermodus.ispressed():
+        if self.freiermodus.isPressed():
             modus = 0
             eingabe = True
-        elif self.ballfolgenabsolut.ispressed():
+        elif self.ballfolgenabsolut.isPressed():
             modus = 1
             eingabe = True
-        elif self.ballfolgencm.ispressed():
+        elif self.ballfolgencm.isPressed():
             modus = 2
             eingabe = True
-        elif self.gesichtserkennung.ispressed():
+        elif self.gesichtserkennung.isPressed():
             modus = 3
             eingabe = True
-        elif self.startenlanden.ispressed():
+        elif self.startenlanden.isPressed():
             start = 1
             eingabe = True
-        elif self.flip.ispressed():
+        elif self.flip.isPressed():
             flip = 1
             eingabe = True
 
@@ -185,10 +185,10 @@ class Dashboard:
         return [int(eingabe), 1, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4]
 
 
-    def loadall(self, img, height, battery, temperature, speedx, speedy, speedz,  modus):
+    def loadAll(self, img, height, battery, temperature, speedx, speedy, speedz,  modus):
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
-        Dashboard.checkforexit(self)
-        DashboardDaten = Dashboard.checkbutton(self, modus)
+        Dashboard.checkForExit(self)
+        DashboardDaten = Dashboard.checkButton(self, modus)
 
 
         #GRAPHICS
@@ -242,8 +242,8 @@ class Dashboard:
         return DashboardDaten
 
 
-    def loadnotconnected(self):
-        Dashboard.checkforexit(self)
+    def loadNotConnected(self):
+        Dashboard.checkForExit(self)
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
         pygame.display.flip()
@@ -270,7 +270,7 @@ class Button:
         pygame.draw.rect(screen, self.MARGINCOLOR, self.margin)
         screen.blit(self.button, (self.margin.x+Button.MARGIN, self.margin.y+Button.MARGIN))
 
-    def ispressed(self):
+    def isPressed(self):
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
         if self.margin.collidepoint(mousepos):
