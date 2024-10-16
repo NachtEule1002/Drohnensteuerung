@@ -106,7 +106,7 @@ class Dashboard:
         #Button Gesichtserkennung
         self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
         #Button Flip
-        self.flip = Button("Flip", Dashboard.FLIPPOS[0], Dashboard.FLIPPOS[1])
+        self.flip = Button("Flip nach vorne", Dashboard.FLIPPOS[0], Dashboard.FLIPPOS[1])
         #Button Sarten/Landen
         self.startenlanden = Button("Starten - Landen", Dashboard.STARTENLANDENPOS[0], Dashboard.STARTENLANDENPOS[1])
 
@@ -138,7 +138,7 @@ class Dashboard:
         self.screen.blit(img, (x, y))
 
 
-    def checkmodus(self, modus):
+    def checkbutton(self, modus):
 
         eingabe, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4 = False, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
@@ -188,7 +188,7 @@ class Dashboard:
     def loadall(self, img, height, battery, temperature, speedx, speedy, speedz,  modus):
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         Dashboard.checkforexit(self)
-        DashboardDaten = Dashboard.checkmodus(self, modus)
+        DashboardDaten = Dashboard.checkbutton(self, modus)
 
 
         #GRAPHICS
@@ -236,7 +236,6 @@ class Dashboard:
         self.flip.showButton(self.screen)
         #Button Flip
         self.startenlanden.showButton(self.screen)
-
 
         pygame.display.flip()
 
