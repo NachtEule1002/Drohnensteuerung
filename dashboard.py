@@ -27,7 +27,7 @@ class Dashboard:
 
     #STATUS
     STATUSPOS = 1000, 10
-    STATUSAREA = 420, 400
+    STATUSAREA = 333, 345
 
     #Battery
     BATTERYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + VERTICALELEMENTDISTANCE
@@ -44,12 +44,15 @@ class Dashboard:
     SPEEDZPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 6 * VERTICALELEMENTDISTANCE
 
     #MODUS
-    MODUSPOS = 1000, 450
-    MODUSAREA = 420, 400
+    MODUSPOS = 1000, 390
+    MODUSAREA = 333, 245
 
     #Control
-    CONTROLPOS = 1460, 10
-    CONTROLAREA = 420, 840
+    CONTROLPOS = 1000, 670
+    CONTROLAREA = 333, 153
+
+    #Keyboard
+    KEYBOARDPOS = 1360, 10
 
     #BUTTONS
     #Button Freier Modus
@@ -79,7 +82,7 @@ class Dashboard:
         self.screen = pygame.display.set_mode((Dashboard.WINDOWWIDTH-10, Dashboard.WINDOWHEIGHT-70))
         pygame.display.set_caption("Dashboard Drohnensteuerung")
         self.FONT = pygame.font.SysFont("bahnschrift", Dashboard.TEXTSIZE, False, False)
-
+        self.tastenbelegung = pygame.image.load("Tastenbelegung.png")
 
 
         #EXTRA AREAS
@@ -137,6 +140,12 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
+    def showPicture(self, img, x, y, margin):
+        imgwidth = img.get_rect()[2]
+        imgheight = img.get_rect()[3]
+        margin = pygame.Rect(x-margin, y-margin, imgwidth+2*margin, imgheight+2*margin)
+        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
+        self.screen.blit(img, (x, y))
 
     def checkButton(self, modus):
 
@@ -236,6 +245,9 @@ class Dashboard:
         self.flip.showButton(self.screen)
         #Button Flip
         self.startenlanden.showButton(self.screen)
+
+        #Tastenbelegung
+        self.showPicture(self.tastenbelegung, Dashboard.KEYBOARDPOS[0], Dashboard.KEYBOARDPOS[1], Dashboard.MARGIN)
 
         pygame.display.flip()
 
