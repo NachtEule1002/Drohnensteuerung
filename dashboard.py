@@ -7,8 +7,8 @@ import sys
 
 class Dashboard:
 
-    WINDOWWIDTH = 1920
-    WINDOWHEIGHT = 1080
+    WINDOWWIDTH = 1910
+    WINDOWHEIGHT = 905
     TEXTSIZE = 30
     TEXTCOLOR = (0, 0, 0)
     TEXTBACKGROUNDCOLOR = (255, 255, 255)
