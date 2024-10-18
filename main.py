@@ -19,8 +19,6 @@ from pythonping import ping
 # VARIABLEN
 # -------------------------------------------------------------------------------------
 
-# Großgeschrieben = Feste Variablen
-
 DRONE_IP = '192.168.10.1'
 
 AUSGABEARRAY = []
@@ -48,17 +46,14 @@ controller = XBoxControl.XboxController()
 dashboard = dashboard.Dashboard()
 
 # -------------------------------------------------------------------------------------
-# METHODEN
+# Ausgabefenster clearen
 # -------------------------------------------------------------------------------------
-    
-
-# Ausgabefenster clearen:
 
 clear = lambda: os.system('cls' if os.name=='nt' else 'clear') #direkt für Windows und Linux implementiert
 
 # -------------------------------------------------------------------------------------
 
-if DROHNE_AKTIV: # Nur wenn Drohne aktiv
+if DROHNE_AKTIV: # Drohne verbinden, wenn aktiv
     drone = dronecomms.dronecomms()
     drone.connect()
     drone.streamon()
@@ -66,8 +61,6 @@ if DROHNE_AKTIV: # Nur wenn Drohne aktiv
 # -------------------------------------------------------------------------------------
 # HAUPTSCHLEIFE
 # -------------------------------------------------------------------------------------
-
-#vid = cv2.VideoCapture(0)
 
 videostatus = 0
 
@@ -83,10 +76,6 @@ while running:
 
     clear()
     print(AUSGABEARRAY)
-
-
-    # Steuerungsstandard: [Eingabe gegeben, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Button2, Button3, Button4]
-    # [False oder True, Modus, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
 
     KeyboardDaten = KeyboardControl.keyboardControl()
     
@@ -129,8 +118,8 @@ while running:
             videostatus = 2
         elif videostatus != 3 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1 or DashboardDaten[11] == 1):
             videostatus = 3
-        elif videostatus != 4 and (ControllerDaten[12] == 1 or KeyboardDaten[12] == 1 or DashboardDaten[12] == 1):
-            videostatus = 4
+        #elif videostatus != 4 and (ControllerDaten[12] == 1 or KeyboardDaten[12] == 1):
+        #    videostatus = 4
 
         print("Videostatus: " + str(videostatus))
 
@@ -160,6 +149,10 @@ while running:
 
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
         drone.sendcontrols(steuerungsmodus, SteuerungsDaten)
+
+        # Steuerungsstandard: [Eingabe gegeben, Eingabemodus, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Manuell, Auto1, Auto2, Auto3]
+        # [False oder True, 0 und 1, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
+
 
     else:
         dashboard.loadNotConnected()

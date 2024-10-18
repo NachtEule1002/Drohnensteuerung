@@ -12,6 +12,8 @@ class dronecomms(object):
         self.tookoff = False
         self.moving = False
         self.connected = False
+
+        self.takeoff_initiated = False
         
     def connect(self):
         self.MYTELLO.connect()
@@ -112,16 +114,21 @@ class dronecomms(object):
 
     def sendcontrols(self,mode, movementtable):
 
-        # control-standard: [up + down, rotate cw + ccw, forward + backward, right + left, takeoff + land, flip, Button3 (unassigned), Button4 (unass.)]
-        # [-100 to 100, -100 to 100, -100 to 100, -100 to 100, 0 or 1, 0 or 1, 0 or 1, 0 or 1]
+        # Steuerungsstandard: [Eingabe gegeben, Eingabemodus, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Manuell, Auto1, Auto2, Auto3]
+        # [False oder True, 0 und 1, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
 
         if self.connected:
-            if movementtable[4] == 1 and self.tookoff == False: # takeoff
-                self.takeoff()
-                
-            elif movementtable[4]  == 1 and self.tookoff:       # land
-                self.MYTELLO.send_rc_control(0,0,0,0)
-                self.land()
+            if movementtable[4] == 1 and self.takeoff_initiated == False:
+                self.takeoff_initiated = True
+                if self.tookoff == False: # takeoff
+                    self.takeoff()
+
+                elif self.tookoff:       # land
+                    self.MYTELLO.send_rc_control(0,0,0,0)
+                    self.land()
+
+            elif movementtable[4] == 0 and self.takeoff_initiated:
+                self.takeoff_initiated = False
 
             if self.tookoff:
                 if movementtable[5] == 1:   # optional flip
