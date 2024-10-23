@@ -15,13 +15,13 @@ def processImage(img, status):
 
     #finalimg = img
 
-    if status == 0:
+    if status == 0: # Bei manuellem Betrieb
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")
 
         return finalimg,[0,1,0,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
-    elif status == 5: # FARBCHECK
+    elif status == 5: # FARBCHECK, NUR FÜR FARBTESTS, UNVERWENDET
 
         img = cv2.GaussianBlur(img, (5, 5), 5)  # Bild blurren gegen Rauschen
 
@@ -29,14 +29,17 @@ def processImage(img, status):
 
         height, width = hsv_img.shape[:2]
 
+        #Referenz-Rechteck in Bildmitte erzeugen
         start = (int(width / 2) - 5, int(height / 2) - 5)
         end = (int(width / 2) + 5, int(height / 2) + 5)
         color= (255, 0, 0)
 
         cv2.rectangle(img, start , end, color= color, thickness=2)
 
+        #Aktuellen Farbwert des mittleren Pixels ermitteln
         hsvcur = hsv_img[int(height/2),int(width/2)]
 
+        # Min- und Max-Werte aktualisieren
         if hsvcur[0] > hsvmax[0]:
             hsvmax[0] = hsvcur[0]
         if hsvcur[0] < hsvmin[0]:
@@ -89,11 +92,11 @@ def processImage(img, status):
         return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
 
-    elif status == 3: #GESICHTSERKENNUNG
+    elif status == 3: #GESICHTSERKENNUNG inkl Drehung
 
         img, rotation = RotateFace(img)
 
-        finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")
+        finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
         return finalimg, [1, 1, 0, rotation * 2, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
@@ -106,7 +109,7 @@ def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
     movez = 0
     movenear = 0
 
-    diffx, diffy, size = getBallPos(hsv_img) #Position des Balls
+    diffx, diffy, size, img = getBallPos(hsv_img, img) #Position des Balls
 
     diffx = -diffx  #Werte für Verarbeitung in diesem Modus invertieren
     diffy = -diffy
@@ -188,9 +191,7 @@ def followBallCM(img):
     diff_y_cm = 0
     movenear = 0
 
-    diffx, diffy, size = getBallPos(hsv_img) #Position des Balls
-
-    # HIER NOCH BEWEGUNG EINFÜGEN
+    diffx, diffy, size, img = getBallPos(hsv_img, img) #Position des Balls
 
     if (diffx+diffy) > 0:
 
@@ -208,6 +209,12 @@ def followBallCM(img):
             diff_x_cm = 0
         if abs(diff_y_cm) < movemindiff:
             diff_y_cm = 0
+
+        cv2.putText(img,
+                    "x-diff [cm]: " + str(diff_x_cm) + "; z-diff [cm]: " + str(diff_y_cm),
+                    (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (0, 0, 255), 2,
+                    cv2.LINE_AA)
 
     return img, diff_x_cm,diff_y_cm,0
 
@@ -227,14 +234,20 @@ def RotateFace(img):
 
         rotation = -int(diffx/height * 65)
 
-        print(rotation)
+        #print(rotation)
+
+        cv2.putText(img,
+                    "Rotation: " + str(rotation),
+                    (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (0, 0, 255), 2,
+                    cv2.LINE_AA)
 
     if not(rotation > 5 or rotation < -5):
         rotation = 0
 
     return img, rotation
 
-def getBallPos(img):
+def getBallPos(hsv_img, img):
 
     diffx = 0
     diffy = 0
@@ -243,16 +256,16 @@ def getBallPos(img):
     lower = (35, 30, 40)  # fixHSVRange(135,20,20
     upper = (90, 255, 253)  # fixHSVRange(190,100,100)
 
-    height, width = img.shape[:2]
+    height, width = hsv_img.shape[:2]
 
-    mask = cv2.inRange(img, lower, upper)
+    mask = cv2.inRange(hsv_img, lower, upper)
 
     contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
     if len(contours) > 0:
         c = max(contours, key=cv2.contourArea)
         if len(c) > 5 and c.size > 500:
-            cv2.drawContours(img, c, -1, (0, 0, 255), 1)
+            cv2.drawContours(hsv_img, c, -1, (0, 0, 255), 1)
 
             rct = cv2.fitEllipse(c)
             cv2.ellipse(img, rct, (0, 0, 255), 3)
@@ -280,7 +293,7 @@ def getBallPos(img):
 
             size = c.size
 
-    return diffx, diffy, size
+    return diffx, diffy, size, img
 
 #def getFacePos(img):
 
