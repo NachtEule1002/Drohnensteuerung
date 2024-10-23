@@ -4,7 +4,6 @@
 import pygame
 import sys
 
-
 class Dashboard:
 
     WINDOWWIDTH = 1910
@@ -20,7 +19,6 @@ class Dashboard:
 
     #Drohne nicht verbunden
     NODRONEPOS = 100 , 100
-
 
     #Camera
     CAMERAPOS = 10, 10
@@ -58,19 +56,21 @@ class Dashboard:
     #BUTTONS
     #Button Freier Modus
     FREIERMODUSPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + VERTICALELEMENTDISTANCE
+
     #Button Ball folgen (Absolut)
     BALLFOLGENABSOLUTPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
+
     #Button Ball folgen (cm)
     BALLVERFOLGENCMPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
+
     #Button Gesichtserkennung
     GESICHTSERKENNUNGPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
+
     # Button Starten/Landen
     STARTENLANDENPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
+
     #Button Flip
     FLIPPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + 2 * VERTICALELEMENTDISTANCE
-
-
-
 
     # Fenster erstellen und starten
     def __init__(self):
@@ -94,14 +94,19 @@ class Dashboard:
         #BUTTONS
         #Button Freier Modus
         self.freiermodus = Button("Freier Modus", Dashboard.FREIERMODUSPOS[0], Dashboard.FREIERMODUSPOS[1])
+
         #Button Ball folgen (Absolut)
         self.ballfolgenabsolut = Button("Ball folgen (Absolut)", Dashboard.BALLFOLGENABSOLUTPOS[0], Dashboard.BALLFOLGENABSOLUTPOS[1])
+
         #Button Ball folgen (cm)
         self.ballfolgencm = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENCMPOS[0], Dashboard.BALLVERFOLGENCMPOS[1])
+
         #Button Gesichtserkennung
         self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
+
         #Button Flip
         self.flip = Button("Flip nach vorne", Dashboard.FLIPPOS[0], Dashboard.FLIPPOS[1])
+
         #Button Sarten/Landen
         self.startenlanden = Button("Starten - Landen", Dashboard.STARTENLANDENPOS[0], Dashboard.STARTENLANDENPOS[1])
 
