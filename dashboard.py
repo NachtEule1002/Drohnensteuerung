@@ -16,6 +16,7 @@ class Dashboard:
     BACKGROUNDCOLOR = (115, 179, 189)
     MARGIN = 5
     VERTICALELEMENTDISTANCE = 50
+    HORIZONTALDISTANCE = 20
 
     #Drohne nicht verbunden
     NODRONEPOS = 100 , 100
@@ -30,18 +31,18 @@ class Dashboard:
     STATUSAREA = 333, 345
 
     #Battery
-    BATTERYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + VERTICALELEMENTDISTANCE
+    BATTERYPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + VERTICALELEMENTDISTANCE
 
     #Height
-    HEIGHTPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
+    HEIGHTPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
 
     #Temperature
-    TEMPERATUREPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
+    TEMPERATUREPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
 
     #Speed
-    SPEEDXPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
-    SPEEDYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 5 * VERTICALELEMENTDISTANCE
-    SPEEDZPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 6 * VERTICALELEMENTDISTANCE
+    SPEEDXPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
+    SPEEDYPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 5 * VERTICALELEMENTDISTANCE
+    SPEEDZPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 6 * VERTICALELEMENTDISTANCE
 
     #MODUS
     MODUSPOS = 1000, 390
@@ -56,39 +57,30 @@ class Dashboard:
 
     #BUTTONS
     #Button Freier Modus
-    FREIERMODUSPOS = MODUSPOS[0] + 20, MODUSPOS[1] + VERTICALELEMENTDISTANCE
+    FREIERMODUSPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + VERTICALELEMENTDISTANCE
     #Button Ball folgen (Absolut)
-    BALLFOLGENABSOLUTPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 2*VERTICALELEMENTDISTANCE
+    BALLFOLGENABSOLUTPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
     #Button Ball folgen (cm)
-    BALLVERFOLGENCMPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 3*VERTICALELEMENTDISTANCE
+    BALLVERFOLGENCMPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
     #Button Gesichtserkennung
-    GESICHTSERKENNUNGPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 4*VERTICALELEMENTDISTANCE
+    GESICHTSERKENNUNGPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
     # Button Starten/Landen
-    STARTENLANDENPOS = CONTROLPOS[0] + 20, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
+    STARTENLANDENPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
     #Button Flip
-    FLIPPOS = CONTROLPOS[0] + 20, CONTROLPOS[1] + 2*VERTICALELEMENTDISTANCE
+    FLIPPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + 2 * VERTICALELEMENTDISTANCE
 
 
 
 
     # Fenster erstellen und starten
     def __init__(self):
-        pygame.init()                                          
-        #window = pygame.display.get_desktop_sizes()
-        #window = window[0]
-        #windowwidth = window[0]
-        #windowheight = window[1]
-        #self.screen = pygame.display.set_mode((windowwidth-10, windowheight-70))
+        pygame.init()
         self.screen = pygame.display.set_mode((Dashboard.WINDOWWIDTH-10, Dashboard.WINDOWHEIGHT-70))
         pygame.display.set_caption("Dashboard Drohnensteuerung")
         self.FONT = pygame.font.SysFont("bahnschrift", Dashboard.TEXTSIZE, False, False)
         self.tastenbelegung = pygame.image.load("Tastenbelegung.png")
 
-
         #EXTRA AREAS
-        #Camera
-        self.cameraarea = pygame.Rect(Dashboard.CAMERAPOS[0]-Dashboard.MARGIN, Dashboard.CAMERAPOS[1]-Dashboard.MARGIN, Dashboard.CAMERAAREA[0]+2*Dashboard.MARGIN, Dashboard.CAMERAAREA[1]+2*Dashboard.MARGIN)
-
         #Status
         self.statusarea = pygame.Rect(Dashboard.STATUSPOS[0]-Dashboard.MARGIN, Dashboard.STATUSPOS[1]-Dashboard.MARGIN, Dashboard.STATUSAREA[0]+2*Dashboard.MARGIN, Dashboard.STATUSAREA[1]+2*Dashboard.MARGIN)
 
@@ -119,19 +111,6 @@ class Dashboard:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-            #if pygame.mouse.get_pressed()[0] and not Dashboard.mousepressed:
-            #print("Jooo")
-            #Dashboard.mousepos = pygame.mouse.get_pos()
-            #if self.button.get_rect().collidepoint(Dashboard.mousepos):
-            #print("Takeoff")
-
-            #Dashboard.mousepressed = True
-            #if not pygame.mouse.get_pressed()[0]:
-            #Dashboard.mousepressed = False
-
-
-
 
     def showText(self, text, x, y, margin):
         img = self.FONT.render(text, True, Dashboard.TEXTCOLOR, Dashboard.TEXTBACKGROUNDCOLOR)
@@ -193,17 +172,14 @@ class Dashboard:
 
         return [int(eingabe), 1, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4]
 
-
     def loadAll(self, img, height, battery, temperature, speedx, speedy, speedz,  modus):
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         Dashboard.checkForExit(self)
         DashboardDaten = Dashboard.checkButton(self, modus)
 
-
         #GRAPHICS
         #Camera
-        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.cameraarea)
-        self.screen.blit(img, Dashboard.CAMERAPOS)
+        self.showPicture(img, Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1], Dashboard.MARGIN)
         self.showText("KAMERABILD", Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1], Dashboard.MARGIN)
 
         #Status
@@ -253,13 +229,11 @@ class Dashboard:
 
         return DashboardDaten
 
-
     def loadNotConnected(self):
         Dashboard.checkForExit(self)
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
         pygame.display.flip()
-
 
 
 class Button:
@@ -286,12 +260,9 @@ class Button:
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
         if self.margin.collidepoint(mousepos):
-            #self.MARGINCOLOR = Button.HOVERMARGINCOLOR
             if mousepressed and not self.pressed:
                 self.pressed = True
                 return True
-        #else:
-            #self.MARGINCOLOR = Button.MARGINCOLOR
         if not mousepressed:
             self.pressed = False
         return False
