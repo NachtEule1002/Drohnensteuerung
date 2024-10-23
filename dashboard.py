@@ -87,7 +87,7 @@ class Dashboard:
         #Modus
         self.modusarea = pygame.Rect(Dashboard.MODUSPOS[0]-Dashboard.MARGIN, Dashboard.MODUSPOS[1]-Dashboard.MARGIN, Dashboard.MODUSAREA[0]+2*Dashboard.MARGIN, Dashboard.MODUSAREA[1]+2*Dashboard.MARGIN)
 
-        #Control
+        #Steuerung
         self.controlarea = pygame.Rect(Dashboard.CONTROLPOS[0]-Dashboard.MARGIN, Dashboard.CONTROLPOS[1]-Dashboard.MARGIN, Dashboard.CONTROLAREA[0]+2*Dashboard.MARGIN, Dashboard.CONTROLAREA[1]+2*Dashboard.MARGIN)
 
 
@@ -112,22 +112,21 @@ class Dashboard:
 
     def checkForExit(self):
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-    def showText(self, text, x, y, margin):
+    def showText(self, text, x, y):
         img = self.FONT.render(text, True, Dashboard.TEXTCOLOR, Dashboard.TEXTBACKGROUNDCOLOR)
         imgsize = pygame.font.Font.size(self.FONT, text)
-        margin = pygame.Rect(x-margin, y-margin, imgsize[0]+2*margin, imgsize[1]+2*margin)
+        margin = pygame.Rect(x-Dashboard.MARGIN, y-Dashboard.MARGIN, imgsize[0]+2*Dashboard.MARGIN, imgsize[1]+2*Dashboard.MARGIN)
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
-    def showPicture(self, img, x, y, margin):
+    def showPicture(self, img, x, y):
         imgwidth = img.get_rect()[2]
         imgheight = img.get_rect()[3]
-        margin = pygame.Rect(x-margin, y-margin, imgwidth+2*margin, imgheight+2*margin)
+        margin = pygame.Rect(x-Dashboard.MARGIN, y-Dashboard.MARGIN, imgwidth+2*Dashboard.MARGIN, imgheight+2*Dashboard.MARGIN)
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
@@ -184,34 +183,34 @@ class Dashboard:
 
         #GRAPHICS
         #Camera
-        self.showPicture(img, Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1], Dashboard.MARGIN)
-        self.showText("KAMERABILD", Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1], Dashboard.MARGIN)
+        self.showPicture(img, Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1])
+        self.showText("KAMERABILD", Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1])
 
         #Status
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.statusarea, Dashboard.MARGIN)
-        self.showText("STATUS", Dashboard.STATUSPOS[0], Dashboard.STATUSPOS[1], Dashboard.MARGIN)
+        self.showText("STATUS", Dashboard.STATUSPOS[0], Dashboard.STATUSPOS[1])
 
         #Battery
-        self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1], Dashboard.MARGIN)
+        self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1])
 
         #Height
-        self.showText("Höhe: " + str(height) + " cm", Dashboard.HEIGHTPOS[0], Dashboard.HEIGHTPOS[1], Dashboard.MARGIN)
+        self.showText("Höhe: " + str(height) + " cm", Dashboard.HEIGHTPOS[0], Dashboard.HEIGHTPOS[1])
 
         #Temperature
-        self.showText("Temperatur: " + str(temperature) + " °C", Dashboard.TEMPERATUREPOS[0], Dashboard.TEMPERATUREPOS[1], Dashboard.MARGIN)
+        self.showText("Temperatur: " + str(temperature) + " °C", Dashboard.TEMPERATUREPOS[0], Dashboard.TEMPERATUREPOS[1])
 
         #Speed
-        self.showText("Geschw. X: " + str(speedx), Dashboard.SPEEDXPOS[0], Dashboard.SPEEDXPOS[1], Dashboard.MARGIN)
-        self.showText("Geschw. Y: " + str(speedy), Dashboard.SPEEDYPOS[0], Dashboard.SPEEDYPOS[1], Dashboard.MARGIN)
-        self.showText("Geschw. Z: " + str(speedz), Dashboard.SPEEDZPOS[0], Dashboard.SPEEDZPOS[1], Dashboard.MARGIN)
+        self.showText("Geschw. X: " + str(speedx), Dashboard.SPEEDXPOS[0], Dashboard.SPEEDXPOS[1])
+        self.showText("Geschw. Y: " + str(speedy), Dashboard.SPEEDYPOS[0], Dashboard.SPEEDYPOS[1])
+        self.showText("Geschw. Z: " + str(speedz), Dashboard.SPEEDZPOS[0], Dashboard.SPEEDZPOS[1])
 
         #Modus
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.modusarea, Dashboard.MARGIN)
-        self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1], Dashboard.MARGIN)
+        self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1])
 
         #Control
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.controlarea, Dashboard.MARGIN)
-        self.showText("STEUERUNG", Dashboard.CONTROLPOS[0], Dashboard.CONTROLPOS[1], Dashboard.MARGIN)
+        self.showText("STEUERUNG", Dashboard.CONTROLPOS[0], Dashboard.CONTROLPOS[1])
 
         #BUTTONS
         #Button Freier Modus
@@ -228,7 +227,7 @@ class Dashboard:
         self.startenlanden.showButton(self.screen)
 
         #Tastenbelegung
-        self.showPicture(self.tastenbelegung, Dashboard.KEYBOARDPOS[0], Dashboard.KEYBOARDPOS[1], Dashboard.MARGIN)
+        self.showPicture(self.tastenbelegung, Dashboard.KEYBOARDPOS[0], Dashboard.KEYBOARDPOS[1])
 
         pygame.display.flip()
 
@@ -237,7 +236,7 @@ class Dashboard:
     def loadNotConnected(self):
         Dashboard.checkForExit(self)
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
-        self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
+        self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1])
         pygame.display.flip()
 
 
