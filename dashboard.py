@@ -256,10 +256,6 @@ class Button:
         self.margin = pygame.Rect(x-Button.MARGIN, y-Button.MARGIN, buttonsize[0]+2*Button.MARGIN, buttonsize[1]+2*Button.MARGIN)
         self.pressed = False
 
-    def showButton(self, screen):
-        pygame.draw.rect(screen, self.MARGINCOLOR, self.margin)
-        screen.blit(self.button, (self.margin.x+Button.MARGIN, self.margin.y+Button.MARGIN))
-
     def isPressed(self):
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
@@ -270,3 +266,7 @@ class Button:
         if not mousepressed:
             self.pressed = False
         return False
+
+    def showButton(self, screen):
+        pygame.draw.rect(screen, self.MARGINCOLOR, self.margin)
+        screen.blit(self.button, (self.margin.x+Button.MARGIN, self.margin.y+Button.MARGIN))
