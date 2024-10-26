@@ -259,8 +259,7 @@ class Button:
     def isPressed(self):
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
-        if self.margin.collidepoint(mousepos):
-            if mousepressed and not self.pressed:
+        if mousepressed and not self.pressed and self.margin.collidepoint(mousepos):
                 self.pressed = True
                 return True
         if not mousepressed:
