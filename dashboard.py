@@ -1,12 +1,14 @@
-# DASHBOARD
+#DASHBOARD
 #---------------------------------------------------
 
 import pygame
 import sys
 
-
 class Dashboard:
 
+    #-------------------------------------------------------------------------------------------------------------------
+    #KONSTANTEN
+    #-------------------------------------------------------------------------------------------------------------------
     WINDOWWIDTH = 1910
     WINDOWHEIGHT = 905
     TEXTSIZE = 30
@@ -16,134 +18,114 @@ class Dashboard:
     BACKGROUNDCOLOR = (115, 179, 189)
     MARGIN = 5
     VERTICALELEMENTDISTANCE = 50
+    HORIZONTALDISTANCE = 20
 
     #Drohne nicht verbunden
     NODRONEPOS = 100 , 100
 
-
-    #Camera
+    #Kamera
     CAMERAPOS = 10, 10
     CAMERAAREA = 960, 720
 
-    #STATUS
+    #Status
     STATUSPOS = 1000, 10
     STATUSAREA = 333, 345
 
-    #Battery
-    BATTERYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + VERTICALELEMENTDISTANCE
+    #Batterie
+    BATTERYPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + VERTICALELEMENTDISTANCE
 
-    #Height
-    HEIGHTPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
+    #Höhe
+    HEIGHTPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
 
-    #Temperature
-    TEMPERATUREPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
+    #Temperatur
+    TEMPERATUREPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
 
-    #Speed
-    SPEEDXPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
-    SPEEDYPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 5 * VERTICALELEMENTDISTANCE
-    SPEEDZPOS = STATUSPOS[0] + 20, STATUSPOS[1] + 6 * VERTICALELEMENTDISTANCE
+    #Geschwindigkeit
+    SPEEDXPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
+    SPEEDYPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 5 * VERTICALELEMENTDISTANCE
+    SPEEDZPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 6 * VERTICALELEMENTDISTANCE
 
-    #MODUS
+    #Modus
     MODUSPOS = 1000, 390
     MODUSAREA = 333, 245
 
-    #Control
+    #Steuerung
     CONTROLPOS = 1000, 670
     CONTROLAREA = 333, 153
 
-    #Keyboard
+    #Tastatur
     KEYBOARDPOS = 1360, 10
 
-    #BUTTONS
-    #Button Freier Modus
-    FREIERMODUSPOS = MODUSPOS[0] + 20, MODUSPOS[1] + VERTICALELEMENTDISTANCE
-    #Button Ball folgen (Absolut)
-    BALLFOLGENABSOLUTPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 2*VERTICALELEMENTDISTANCE
-    #Button Ball folgen (cm)
-    BALLVERFOLGENCMPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 3*VERTICALELEMENTDISTANCE
-    #Button Gesichtserkennung
-    GESICHTSERKENNUNGPOS = MODUSPOS[0] + 20, MODUSPOS[1] + 4*VERTICALELEMENTDISTANCE
-    # Button Starten/Landen
-    STARTENLANDENPOS = CONTROLPOS[0] + 20, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
-    #Button Flip
-    FLIPPOS = CONTROLPOS[0] + 20, CONTROLPOS[1] + 2*VERTICALELEMENTDISTANCE
+    #KNÖPFE
+    #Knopf Freier Modus
+    FREIERMODUSPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + VERTICALELEMENTDISTANCE
+    #Knopf Ball folgen (Absolut)
+    BALLFOLGENABSOLUTPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
+    #Knopf Ball folgen (cm)
+    BALLVERFOLGENCMPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
+    #Knopf Gesichtserkennung
+    GESICHTSERKENNUNGPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
+    #Knopf Starten/Landen
+    STARTENLANDENPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
+    #Knopf Flip
+    FLIPPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + 2 * VERTICALELEMENTDISTANCE
 
-
-
-
-    # Fenster erstellen und starten
+    #-------------------------------------------------------------------------------------------------------------------
+    #METHODEN
+    #-------------------------------------------------------------------------------------------------------------------
     def __init__(self):
-        pygame.init()                                          
-        #window = pygame.display.get_desktop_sizes()
-        #window = window[0]
-        #windowwidth = window[0]
-        #windowheight = window[1]
-        #self.screen = pygame.display.set_mode((windowwidth-10, windowheight-70))
+        pygame.init()
         self.screen = pygame.display.set_mode((Dashboard.WINDOWWIDTH-10, Dashboard.WINDOWHEIGHT-70))
         pygame.display.set_caption("Dashboard Drohnensteuerung")
         self.FONT = pygame.font.SysFont("bahnschrift", Dashboard.TEXTSIZE, False, False)
         self.tastenbelegung = pygame.image.load("Tastenbelegung.png")
 
-
-        #EXTRA AREAS
-        #Camera
-        self.cameraarea = pygame.Rect(Dashboard.CAMERAPOS[0]-Dashboard.MARGIN, Dashboard.CAMERAPOS[1]-Dashboard.MARGIN, Dashboard.CAMERAAREA[0]+2*Dashboard.MARGIN, Dashboard.CAMERAAREA[1]+2*Dashboard.MARGIN)
-
+        #EXTRA FLÄCHE
         #Status
         self.statusarea = pygame.Rect(Dashboard.STATUSPOS[0]-Dashboard.MARGIN, Dashboard.STATUSPOS[1]-Dashboard.MARGIN, Dashboard.STATUSAREA[0]+2*Dashboard.MARGIN, Dashboard.STATUSAREA[1]+2*Dashboard.MARGIN)
 
         #Modus
         self.modusarea = pygame.Rect(Dashboard.MODUSPOS[0]-Dashboard.MARGIN, Dashboard.MODUSPOS[1]-Dashboard.MARGIN, Dashboard.MODUSAREA[0]+2*Dashboard.MARGIN, Dashboard.MODUSAREA[1]+2*Dashboard.MARGIN)
 
-        #Control
+        #Steuerung
         self.controlarea = pygame.Rect(Dashboard.CONTROLPOS[0]-Dashboard.MARGIN, Dashboard.CONTROLPOS[1]-Dashboard.MARGIN, Dashboard.CONTROLAREA[0]+2*Dashboard.MARGIN, Dashboard.CONTROLAREA[1]+2*Dashboard.MARGIN)
 
-
-        #BUTTONS
-        #Button Freier Modus
+        #KNÖPFE
+        #Knopf Freier Modus
         self.freiermodus = Button("Freier Modus", Dashboard.FREIERMODUSPOS[0], Dashboard.FREIERMODUSPOS[1])
-        #Button Ball folgen (Absolut)
+
+        #Knopf Ball folgen (Absolut)
         self.ballfolgenabsolut = Button("Ball folgen (Absolut)", Dashboard.BALLFOLGENABSOLUTPOS[0], Dashboard.BALLFOLGENABSOLUTPOS[1])
-        #Button Ball folgen (cm)
+
+        #Knopf Ball folgen (cm)
         self.ballfolgencm = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENCMPOS[0], Dashboard.BALLVERFOLGENCMPOS[1])
-        #Button Gesichtserkennung
+
+        #Knopf Gesichtserkennung
         self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
-        #Button Flip
+
+        #Knopf Flip
         self.flip = Button("Flip nach vorne", Dashboard.FLIPPOS[0], Dashboard.FLIPPOS[1])
-        #Button Sarten/Landen
+
+        #Knopf Sarten/Landen
         self.startenlanden = Button("Starten - Landen", Dashboard.STARTENLANDENPOS[0], Dashboard.STARTENLANDENPOS[1])
 
     def checkForExit(self):
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            #if pygame.mouse.get_pressed()[0] and not Dashboard.mousepressed:
-            #print("Jooo")
-            #Dashboard.mousepos = pygame.mouse.get_pos()
-            #if self.button.get_rect().collidepoint(Dashboard.mousepos):
-            #print("Takeoff")
-
-            #Dashboard.mousepressed = True
-            #if not pygame.mouse.get_pressed()[0]:
-            #Dashboard.mousepressed = False
-
-
-
-
-    def showText(self, text, x, y, margin):
+    def showText(self, text, x, y):
         img = self.FONT.render(text, True, Dashboard.TEXTCOLOR, Dashboard.TEXTBACKGROUNDCOLOR)
         imgsize = pygame.font.Font.size(self.FONT, text)
-        margin = pygame.Rect(x-margin, y-margin, imgsize[0]+2*margin, imgsize[1]+2*margin)
+        margin = pygame.Rect(x-Dashboard.MARGIN, y-Dashboard.MARGIN, imgsize[0]+2*Dashboard.MARGIN, imgsize[1]+2*Dashboard.MARGIN)
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
-    def showPicture(self, img, x, y, margin):
+    def showPicture(self, img, x, y):
         imgwidth = img.get_rect()[2]
         imgheight = img.get_rect()[3]
-        margin = pygame.Rect(x-margin, y-margin, imgwidth+2*margin, imgheight+2*margin)
+        margin = pygame.Rect(x-Dashboard.MARGIN, y-Dashboard.MARGIN, imgwidth+2*Dashboard.MARGIN, imgheight+2*Dashboard.MARGIN)
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, margin)
         self.screen.blit(img, (x, y))
 
@@ -193,77 +175,75 @@ class Dashboard:
 
         return [int(eingabe), 1, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4]
 
-
     def loadAll(self, img, height, battery, temperature, speedx, speedy, speedz,  modus):
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
         Dashboard.checkForExit(self)
         DashboardDaten = Dashboard.checkButton(self, modus)
 
-
-        #GRAPHICS
-        #Camera
-        pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.cameraarea)
-        self.screen.blit(img, Dashboard.CAMERAPOS)
-        self.showText("KAMERABILD", Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1], Dashboard.MARGIN)
+        #GRAFIKEN
+        #Kamera
+        self.showPicture(img, Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1])
+        self.showText("KAMERABILD", Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1])
 
         #Status
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.statusarea, Dashboard.MARGIN)
-        self.showText("STATUS", Dashboard.STATUSPOS[0], Dashboard.STATUSPOS[1], Dashboard.MARGIN)
+        self.showText("STATUS", Dashboard.STATUSPOS[0], Dashboard.STATUSPOS[1])
 
-        #Battery
-        self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1], Dashboard.MARGIN)
+        #Batterie
+        self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1])
 
-        #Height
-        self.showText("Höhe: " + str(height) + " cm", Dashboard.HEIGHTPOS[0], Dashboard.HEIGHTPOS[1], Dashboard.MARGIN)
+        #Höhe
+        self.showText("Höhe: " + str(height) + " cm", Dashboard.HEIGHTPOS[0], Dashboard.HEIGHTPOS[1])
 
-        #Temperature
-        self.showText("Temperatur: " + str(temperature) + " °C", Dashboard.TEMPERATUREPOS[0], Dashboard.TEMPERATUREPOS[1], Dashboard.MARGIN)
+        #Temperatur
+        self.showText("Temperatur: " + str(temperature) + " °C", Dashboard.TEMPERATUREPOS[0], Dashboard.TEMPERATUREPOS[1])
 
-        #Speed
-        self.showText("Geschw. X: " + str(speedx), Dashboard.SPEEDXPOS[0], Dashboard.SPEEDXPOS[1], Dashboard.MARGIN)
-        self.showText("Geschw. Y: " + str(speedy), Dashboard.SPEEDYPOS[0], Dashboard.SPEEDYPOS[1], Dashboard.MARGIN)
-        self.showText("Geschw. Z: " + str(speedz), Dashboard.SPEEDZPOS[0], Dashboard.SPEEDZPOS[1], Dashboard.MARGIN)
+        #Geschwindigkeit
+        self.showText("Geschw. X: " + str(speedx), Dashboard.SPEEDXPOS[0], Dashboard.SPEEDXPOS[1])
+        self.showText("Geschw. Y: " + str(speedy), Dashboard.SPEEDYPOS[0], Dashboard.SPEEDYPOS[1])
+        self.showText("Geschw. Z: " + str(speedz), Dashboard.SPEEDZPOS[0], Dashboard.SPEEDZPOS[1])
 
         #Modus
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.modusarea, Dashboard.MARGIN)
-        self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1], Dashboard.MARGIN)
+        self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1])
 
-        #Control
+        #Steuerung
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.controlarea, Dashboard.MARGIN)
-        self.showText("STEUERUNG", Dashboard.CONTROLPOS[0], Dashboard.CONTROLPOS[1], Dashboard.MARGIN)
+        self.showText("STEUERUNG", Dashboard.CONTROLPOS[0], Dashboard.CONTROLPOS[1])
 
-        #BUTTONS
-        #Button Freier Modus
+        #KNÖPFE
+        #Knopf Freier Modus
         self.freiermodus.showButton(self.screen)
-        #Button Ball folgen (Absolut)
+        #Knopf Ball folgen (Absolut)
         self.ballfolgenabsolut.showButton(self.screen)
-        #Button Ball folgen (cm)
+        #Knopf Ball folgen (cm)
         self.ballfolgencm.showButton(self.screen)
-        #Button Gesichtserkennung
+        #Knopf Gesichtserkennung
         self.gesichtserkennung.showButton(self.screen)
-        #Button Flip
+        #Knopf Flip
         self.flip.showButton(self.screen)
-        #Button Flip
+        #Knopf Starten/Landen
         self.startenlanden.showButton(self.screen)
 
         #Tastenbelegung
-        self.showPicture(self.tastenbelegung, Dashboard.KEYBOARDPOS[0], Dashboard.KEYBOARDPOS[1], Dashboard.MARGIN)
+        self.showPicture(self.tastenbelegung, Dashboard.KEYBOARDPOS[0], Dashboard.KEYBOARDPOS[1])
 
         pygame.display.flip()
 
         return DashboardDaten
 
-
     def loadNotConnected(self):
         Dashboard.checkForExit(self)
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
-        self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1], Dashboard.MARGIN)
+        self.showText("Drohne nicht verbunden!!!", Dashboard.NODRONEPOS[0], Dashboard.NODRONEPOS[1])
         pygame.display.flip()
-
 
 
 class Button:
 
+    #-------------------------------------------------------------------------------------------------------------------
+    #KONSTANTEN
+    #-------------------------------------------------------------------------------------------------------------------
     MARGIN = 5
     MARGINCOLOR = (0, 0, 0)
     HOVERMARGINCOLOR = (100, 100, 100)
@@ -271,6 +251,9 @@ class Button:
     TEXTCOLOR = (0, 0, 0)
     TEXTBACKGROUNDCOLOR = (255, 255, 255)
 
+    #-------------------------------------------------------------------------------------------------------------------
+    #METHODEN
+    #-------------------------------------------------------------------------------------------------------------------
     def __init__(self, text, x, y):
         FONT = pygame.font.SysFont("bahnschrift", Dashboard.TEXTSIZE, False, False)
         self.button = FONT.render(text, True, Button.TEXTCOLOR, self.TEXTBACKGROUNDCOLOR)
@@ -278,20 +261,16 @@ class Button:
         self.margin = pygame.Rect(x-Button.MARGIN, y-Button.MARGIN, buttonsize[0]+2*Button.MARGIN, buttonsize[1]+2*Button.MARGIN)
         self.pressed = False
 
-    def showButton(self, screen):
-        pygame.draw.rect(screen, self.MARGINCOLOR, self.margin)
-        screen.blit(self.button, (self.margin.x+Button.MARGIN, self.margin.y+Button.MARGIN))
-
     def isPressed(self):
         mousepos = pygame.mouse.get_pos()
         mousepressed = pygame.mouse.get_pressed()[0]
-        if self.margin.collidepoint(mousepos):
-            #self.MARGINCOLOR = Button.HOVERMARGINCOLOR
-            if mousepressed and not self.pressed:
+        if mousepressed and not self.pressed and self.margin.collidepoint(mousepos):
                 self.pressed = True
                 return True
-        #else:
-            #self.MARGINCOLOR = Button.MARGINCOLOR
         if not mousepressed:
             self.pressed = False
         return False
+
+    def showButton(self, screen):
+        pygame.draw.rect(screen, self.MARGINCOLOR, self.margin)
+        screen.blit(self.button, (self.margin.x+Button.MARGIN, self.margin.y+Button.MARGIN))
