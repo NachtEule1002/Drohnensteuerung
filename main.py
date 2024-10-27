@@ -158,6 +158,6 @@ while running:
         dashboard.loadNotConnected()
 
 
-
+    # Schlafen für FPS-tel Sekunde
 
     time.sleep(1/FPS)
