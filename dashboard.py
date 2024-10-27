@@ -1,4 +1,4 @@
-# DASHBOARD
+#DASHBOARD
 #---------------------------------------------------
 
 import pygame
@@ -6,6 +6,9 @@ import sys
 
 class Dashboard:
 
+    #-------------------------------------------------------------------------------------------------------------------
+    #KONSTANTEN
+    #-------------------------------------------------------------------------------------------------------------------
     WINDOWWIDTH = 1910
     WINDOWHEIGHT = 905
     TEXTSIZE = 30
@@ -20,59 +23,56 @@ class Dashboard:
     #Drohne nicht verbunden
     NODRONEPOS = 100 , 100
 
-    #Camera
+    #Kamera
     CAMERAPOS = 10, 10
     CAMERAAREA = 960, 720
 
-    #STATUS
+    #Status
     STATUSPOS = 1000, 10
     STATUSAREA = 333, 345
 
-    #Battery
+    #Batterie
     BATTERYPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + VERTICALELEMENTDISTANCE
 
-    #Height
+    #Höhe
     HEIGHTPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
 
-    #Temperature
+    #Temperatur
     TEMPERATUREPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
 
-    #Speed
+    #Geschwindigkeit
     SPEEDXPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
     SPEEDYPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 5 * VERTICALELEMENTDISTANCE
     SPEEDZPOS = STATUSPOS[0] + HORIZONTALDISTANCE, STATUSPOS[1] + 6 * VERTICALELEMENTDISTANCE
 
-    #MODUS
+    #Modus
     MODUSPOS = 1000, 390
     MODUSAREA = 333, 245
 
-    #Control
+    #Steuerung
     CONTROLPOS = 1000, 670
     CONTROLAREA = 333, 153
 
-    #Keyboard
+    #Tastatur
     KEYBOARDPOS = 1360, 10
 
-    #BUTTONS
-    #Button Freier Modus
+    #KNÖPFE
+    #Knopf Freier Modus
     FREIERMODUSPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + VERTICALELEMENTDISTANCE
-
-    #Button Ball folgen (Absolut)
+    #Knopf Ball folgen (Absolut)
     BALLFOLGENABSOLUTPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
-
-    #Button Ball folgen (cm)
+    #Knopf Ball folgen (cm)
     BALLVERFOLGENCMPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
-
-    #Button Gesichtserkennung
+    #Knopf Gesichtserkennung
     GESICHTSERKENNUNGPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
-
-    # Button Starten/Landen
+    #Knopf Starten/Landen
     STARTENLANDENPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + VERTICALELEMENTDISTANCE
-
-    #Button Flip
+    #Knopf Flip
     FLIPPOS = CONTROLPOS[0] + HORIZONTALDISTANCE, CONTROLPOS[1] + 2 * VERTICALELEMENTDISTANCE
 
-    # Fenster erstellen und starten
+    #-------------------------------------------------------------------------------------------------------------------
+    #METHODEN
+    #-------------------------------------------------------------------------------------------------------------------
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((Dashboard.WINDOWWIDTH-10, Dashboard.WINDOWHEIGHT-70))
@@ -80,7 +80,7 @@ class Dashboard:
         self.FONT = pygame.font.SysFont("bahnschrift", Dashboard.TEXTSIZE, False, False)
         self.tastenbelegung = pygame.image.load("Tastenbelegung.png")
 
-        #EXTRA AREAS
+        #EXTRA FLÄCHE
         #Status
         self.statusarea = pygame.Rect(Dashboard.STATUSPOS[0]-Dashboard.MARGIN, Dashboard.STATUSPOS[1]-Dashboard.MARGIN, Dashboard.STATUSAREA[0]+2*Dashboard.MARGIN, Dashboard.STATUSAREA[1]+2*Dashboard.MARGIN)
 
@@ -90,24 +90,23 @@ class Dashboard:
         #Steuerung
         self.controlarea = pygame.Rect(Dashboard.CONTROLPOS[0]-Dashboard.MARGIN, Dashboard.CONTROLPOS[1]-Dashboard.MARGIN, Dashboard.CONTROLAREA[0]+2*Dashboard.MARGIN, Dashboard.CONTROLAREA[1]+2*Dashboard.MARGIN)
 
-
-        #BUTTONS
-        #Button Freier Modus
+        #KNÖPFE
+        #Knopf Freier Modus
         self.freiermodus = Button("Freier Modus", Dashboard.FREIERMODUSPOS[0], Dashboard.FREIERMODUSPOS[1])
 
-        #Button Ball folgen (Absolut)
+        #Knopf Ball folgen (Absolut)
         self.ballfolgenabsolut = Button("Ball folgen (Absolut)", Dashboard.BALLFOLGENABSOLUTPOS[0], Dashboard.BALLFOLGENABSOLUTPOS[1])
 
-        #Button Ball folgen (cm)
+        #Knopf Ball folgen (cm)
         self.ballfolgencm = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENCMPOS[0], Dashboard.BALLVERFOLGENCMPOS[1])
 
-        #Button Gesichtserkennung
+        #Knopf Gesichtserkennung
         self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
 
-        #Button Flip
+        #Knopf Flip
         self.flip = Button("Flip nach vorne", Dashboard.FLIPPOS[0], Dashboard.FLIPPOS[1])
 
-        #Button Sarten/Landen
+        #Knopf Sarten/Landen
         self.startenlanden = Button("Starten - Landen", Dashboard.STARTENLANDENPOS[0], Dashboard.STARTENLANDENPOS[1])
 
     def checkForExit(self):
@@ -181,8 +180,8 @@ class Dashboard:
         Dashboard.checkForExit(self)
         DashboardDaten = Dashboard.checkButton(self, modus)
 
-        #GRAPHICS
-        #Camera
+        #GRAFIKEN
+        #Kamera
         self.showPicture(img, Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1])
         self.showText("KAMERABILD", Dashboard.CAMERAPOS[0], Dashboard.CAMERAPOS[1])
 
@@ -190,16 +189,16 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.statusarea, Dashboard.MARGIN)
         self.showText("STATUS", Dashboard.STATUSPOS[0], Dashboard.STATUSPOS[1])
 
-        #Battery
+        #Batterie
         self.showText("Batterie: " + str(battery) + " %", Dashboard.BATTERYPOS[0], Dashboard.BATTERYPOS[1])
 
-        #Height
+        #Höhe
         self.showText("Höhe: " + str(height) + " cm", Dashboard.HEIGHTPOS[0], Dashboard.HEIGHTPOS[1])
 
-        #Temperature
+        #Temperatur
         self.showText("Temperatur: " + str(temperature) + " °C", Dashboard.TEMPERATUREPOS[0], Dashboard.TEMPERATUREPOS[1])
 
-        #Speed
+        #Geschwindigkeit
         self.showText("Geschw. X: " + str(speedx), Dashboard.SPEEDXPOS[0], Dashboard.SPEEDXPOS[1])
         self.showText("Geschw. Y: " + str(speedy), Dashboard.SPEEDYPOS[0], Dashboard.SPEEDYPOS[1])
         self.showText("Geschw. Z: " + str(speedz), Dashboard.SPEEDZPOS[0], Dashboard.SPEEDZPOS[1])
@@ -208,22 +207,22 @@ class Dashboard:
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.modusarea, Dashboard.MARGIN)
         self.showText("MODUS", Dashboard.MODUSPOS[0], Dashboard.MODUSPOS[1])
 
-        #Control
+        #Steuerung
         pygame.draw.rect(self.screen, Dashboard.MARGINCOLOR, self.controlarea, Dashboard.MARGIN)
         self.showText("STEUERUNG", Dashboard.CONTROLPOS[0], Dashboard.CONTROLPOS[1])
 
-        #BUTTONS
-        #Button Freier Modus
+        #KNÖPFE
+        #Knopf Freier Modus
         self.freiermodus.showButton(self.screen)
-        #Button Ball folgen (Absolut)
+        #Knopf Ball folgen (Absolut)
         self.ballfolgenabsolut.showButton(self.screen)
-        #Button Ball folgen (cm)
+        #Knopf Ball folgen (cm)
         self.ballfolgencm.showButton(self.screen)
-        #Button Gesichtserkennung
+        #Knopf Gesichtserkennung
         self.gesichtserkennung.showButton(self.screen)
-        #Button Flip
+        #Knopf Flip
         self.flip.showButton(self.screen)
-        #Button Flip
+        #Knopf Starten/Landen
         self.startenlanden.showButton(self.screen)
 
         #Tastenbelegung
@@ -242,6 +241,9 @@ class Dashboard:
 
 class Button:
 
+    #-------------------------------------------------------------------------------------------------------------------
+    #KONSTANTEN
+    #-------------------------------------------------------------------------------------------------------------------
     MARGIN = 5
     MARGINCOLOR = (0, 0, 0)
     HOVERMARGINCOLOR = (100, 100, 100)
@@ -249,6 +251,9 @@ class Button:
     TEXTCOLOR = (0, 0, 0)
     TEXTBACKGROUNDCOLOR = (255, 255, 255)
 
+    #-------------------------------------------------------------------------------------------------------------------
+    #METHODEN
+    #-------------------------------------------------------------------------------------------------------------------
     def __init__(self, text, x, y):
         FONT = pygame.font.SysFont("bahnschrift", Dashboard.TEXTSIZE, False, False)
         self.button = FONT.render(text, True, Button.TEXTCOLOR, self.TEXTBACKGROUNDCOLOR)
