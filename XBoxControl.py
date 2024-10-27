@@ -33,7 +33,6 @@ class XboxController(object):
         self._monitor_thread.start()
 
 
-
     def read(self): # return the buttons/triggers that you care about in this methode
         xl = round(self.LeftJoystickX, 2)
         yl = round(self.LeftJoystickY, 2)
@@ -47,9 +46,6 @@ class XboxController(object):
         lb = round(self.LeftBumper, 2)
         padleftright = round(self.PadLR, 2)
         padupdown = round(self.PadUD, 2)
-
-        # control-standard: [True or False, up + down, rotate cw + ccw, forward + backward, right + left, takeoff + land, flip, Button3 (unass.), Button4 (unass.)]
-        # [-100 to 100, -100 to 100, -100 to 100, -100 to 100, 0 or 1, 0 or 1, 0 or 1, 0 or 1]
 
 
         if abs(xl)+abs(yl)+abs(xr)+abs(yr)+a+b+rb+lb+a+b+x+y+abs(padupdown)+abs(padleftright) > 0: # check, if something is pressed on the controller
@@ -77,7 +73,7 @@ class XboxController(object):
             padleft = 0
             padright = 0
 
-        return [int(iscontrol), 1, int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, y, padup, padright, paddown, padleft]
+        return [int(iscontrol), 1, int(yr*100), int(xr*100), int(yl*100), int(xl*100), a, b, y, padup, padright, paddown]
 
         # A für Takeoff, B für Flip, X für Modus 1, Y für Modus 0
 

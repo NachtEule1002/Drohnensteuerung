@@ -2,8 +2,6 @@
 #----------------------------------------------
 
 import cv2
-from PIL import Image
-import numpy
 import pygame
 from face_lib import face_lib
 
@@ -13,13 +11,11 @@ hsvmax = [0,0,0]
 FL = face_lib()
 def processImage(img, status):
 
-    #finalimg = img
-
     if status == 0: # Bei manuellem Betrieb
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")
 
-        return finalimg,[0,1,0,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg,[0,1,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
     elif status == 5: # FARBCHECK, NUR FÜR FARBTESTS, UNVERWENDET
 
@@ -68,7 +64,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [0,1,0,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [0,1,0,0,0,0,0,0,0,0,0,0]  # Zweiter Wert ist Steuerungsmodus
 
 
     elif status == 1: # Ball folgen Absolut
@@ -79,7 +75,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [1, 1, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0] # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 1, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0] # Zweiter Wert ist Steuerungsmodus
 
     elif status == 2:  # Ball Folgen CM
 
@@ -89,7 +85,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 2, movez, 0, movenear, movex, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
 
     elif status == 3: #GESICHTSERKENNUNG inkl Drehung
@@ -98,7 +94,7 @@ def processImage(img, status):
 
         finalimg = pygame.image.frombuffer(img.tostring(), img.shape[1::-1], "RGB")  # Formatierung für Pygame
 
-        return finalimg, [1, 1, 0, rotation * 2, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
+        return finalimg, [1, 1, 0, rotation * 2, 0, 0, 0, 0, 0, 0, 0, 0]  # Zweiter Wert ist Steuerungsmodus
 
 
 def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
@@ -176,9 +172,6 @@ def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
                 (0, 0, 255), 2,
                 cv2.LINE_AA)
 
-
-    #cv2.imshow("Red",img)
-
     return img, round(movex), round(movez), round(movenear)
 
 
@@ -197,8 +190,6 @@ def followBallCM(img):
 
         max_dist_x = (-0.021*size) + 65
         max_dist_y = max_dist_x * (height/width)
-
-        #print("max Dist x: "+str(max_dist_x))
 
         movemindiff = 20
 
@@ -233,8 +224,6 @@ def RotateFace(img):
         diffx = (int(width / 2) - curx)
 
         rotation = -int(diffx/height * 65)
-
-        #print(rotation)
 
         cv2.putText(img,
                     "Rotation: " + str(rotation),
@@ -294,11 +283,6 @@ def getBallPos(hsv_img, img):
             size = c.size
 
     return diffx, diffy, size, img
-
-#def getFacePos(img):
-
-
-
 
 def fixHSVRange(h, s, v):
     # Normal H,S,V: (0-360,0-100%,0-100%)

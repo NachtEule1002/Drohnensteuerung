@@ -1,6 +1,4 @@
 from djitellopy import tello
-import pygame
-import numpy
 
 class dronecomms(object):
     
@@ -18,13 +16,11 @@ class dronecomms(object):
     def connect(self):
         self.MYTELLO.connect()
         try:
-
             self.connected = True
         except:
             print("Fehler connect")
 
     def getBattery(self):
-        
         if self.connected:
             try:
                 return self.MYTELLO.get_battery()
@@ -46,15 +42,14 @@ class dronecomms(object):
                 print("Fehler streamo")
 
     def takeoff(self):
-
         if self.connected and self.tookoff == False:
             try:
                 self.MYTELLO.takeoff()
                 self.tookoff = True
             except:
                 print("Fehler takeoff")
+
     def land(self):
-        
         if self.connected and self.tookoff:
             try:
                 self.MYTELLO.land()
@@ -63,30 +58,35 @@ class dronecomms(object):
                 print("Fehler lnd")
             
     def getspeed(self, dir):
-
         if self.connected:
-            if dir == "x":
-                return self.MYTELLO.get_speed_x()
-            elif dir == "y":
-                return self.MYTELLO.get_speed_y()
-            else:
-                return self.MYTELLO.get_speed_z()
+            try:
+                if dir == "x":
+                    return self.MYTELLO.get_speed_x()
+                elif dir == "y":
+                    return self.MYTELLO.get_speed_y()
+                else:
+                    return self.MYTELLO.get_speed_z()
+            except:
+                print("Fehler Speed")
 
     def getacceleration(self, dir):
         if self.connected:
-            if dir== "x":
-                return self.MYTELLO.get_acceleration_x()
-            elif dir == "y":
-                return self.MYTELLO.get_acceleration_y()
-            else:
-                return self.MYTELLO.get_acceleration_z()
+            try:
+                if dir== "x":
+                    return self.MYTELLO.get_acceleration_x()
+                elif dir == "y":
+                    return self.MYTELLO.get_acceleration_y()
+                else:
+                    return self.MYTELLO.get_acceleration_z()
+            except:
+                print("Fehler Acceleration")
 
     def getheight(self):
         if self.connected:
             try:
                 return self.MYTELLO.get_height()
             except:
-                print("Fehler")
+                print("Fehler Höhe")
 
     def gettemperature(self):
         if self.connected:
@@ -95,20 +95,14 @@ class dronecomms(object):
             except:
                 print("Fehler tmp")
 
-
-
     def getImage(self):
-
         try:
             img = self.MYTELLO.get_frame_read().frame
-            #img = pygame.image.frombuffer(img.tostring(), img.shape[1::-1],"RGB") # Formatierung
             return img
-        
         except: 
             print("Fehler img")
 
     def flip(self):
-        
         if self.tookoff:
             self.MYTELLO.flip_forward()
 

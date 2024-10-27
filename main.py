@@ -1,19 +1,13 @@
 # -------------------------------------------------------------------------------------
 # MAIN
 # -------------------------------------------------------------------------------------
-import cv2
-from djitellopy import tello
-import pygame
 import KeyboardControl
 import XBoxControl
 import os
 import time
-from inputs import get_gamepad
-import socket
 import dronecomms
 import dashboard
 import ImageProcessing
-import sys
 from pythonping import ping
 # -------------------------------------------------------------------------------------
 # VARIABLEN
@@ -21,10 +15,7 @@ from pythonping import ping
 
 DRONE_IP = '192.168.10.1'
 
-AUSGABEARRAY = []
-
 FPS = 30
-
 
 # Initialer Check, ob Drohne verbunden ist
 
@@ -32,13 +23,12 @@ out = ping(DRONE_IP, count=1, verbose=True)
 
 if "Request timed out" in str(out):
     print("Drohne nicht verbunden")
-    AUSGABEARRAY.append("Drohne nicht verbunden")
+    DROHNE_AKTIV_TEXT = "Drohne nicht verbunden"
     DROHNE_AKTIV = False
 else:
     print("Drohne verbunden")
-    AUSGABEARRAY.append("Drohne verbunden")
+    DROHNE_AKTIV_TEXT = "Drohne nicht verbunden"
     DROHNE_AKTIV = True
-
 
 running = True
 
@@ -75,22 +65,14 @@ speedz = 0
 while running:
 
     clear()
-    print(AUSGABEARRAY)
-
-    KeyboardDaten = KeyboardControl.keyboardControl()
-    
-    
-    ControllerDaten = controller.read()
-
-    SteuerungsDaten = [0,0,0,0,0,0]
-    
-
-
-    #ret, frame = vid.read()
-
-    #currentImg = ImageProcessing.processImage(frame)
+    print(DROHNE_AKTIV_TEXT)
 
     if DROHNE_AKTIV:
+
+        KeyboardDaten = KeyboardControl.keyboardControl()
+        ControllerDaten = controller.read()
+
+        SteuerungsDaten = [0,0,0,0,0,0]
 
         currentImg, BildsteuerDaten = ImageProcessing.processImage(drone.getImage(),videostatus)
 
@@ -105,9 +87,7 @@ while running:
             speedz = -drone.getspeed("z")
             count = 0
 
-
         DashboardDaten = dashboard.loadAll(currentImg, height, battery, temperature, speedx, speedy, speedz, videostatus)
-
 
         # Hier abfragen, damit Bildsteuerung überstimmt wird
         if videostatus != 0 and (ControllerDaten[8] == 1 or KeyboardDaten[8] == 1 or DashboardDaten[8] == 1):
@@ -118,12 +98,10 @@ while running:
             videostatus = 2
         elif videostatus != 3 and (ControllerDaten[11] == 1 or KeyboardDaten[11] == 1 or DashboardDaten[11] == 1):
             videostatus = 3
-        #elif videostatus != 4 and (ControllerDaten[12] == 1 or KeyboardDaten[12] == 1):
-        #    videostatus = 4
 
         print("Videostatus: " + str(videostatus))
 
-
+        # Hierarchie für gewählte Steuerungsdaten
         if KeyboardDaten[0] == 1:
             print("Nutze Keyboard")
             SteuerungsDaten = KeyboardDaten[2:8]
@@ -144,20 +122,17 @@ while running:
             SteuerungsDaten = ControllerDaten[2:8]
             steuerungsmodus = ControllerDaten[1]
 
-
         print(SteuerungsDaten)
-
         print("vx: "+str(drone.getspeed("x")) + " vy: " + str(drone.getspeed("y")) + " vz: " + str(drone.getspeed("z")))
+
+        # Daten senden
         drone.sendcontrols(steuerungsmodus, SteuerungsDaten)
 
         # Steuerungsstandard: [Eingabe gegeben, Eingabemodus, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Manuell, Auto1, Auto2, Auto3]
         # [False oder True, 0 und 1, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
 
-
     else:
         dashboard.loadNotConnected()
 
-
     # Schlafen für FPS-tel Sekunde
-
     time.sleep(1/FPS)
