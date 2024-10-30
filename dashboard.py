@@ -61,8 +61,8 @@ class Dashboard:
     FREIERMODUSPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + VERTICALELEMENTDISTANCE
     #Knopf Ball folgen (Absolut)
     BALLFOLGENABSOLUTPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 2 * VERTICALELEMENTDISTANCE
-    #Knopf Ball folgen (cm)
-    BALLVERFOLGENCMPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
+    #Knopf Ball folgen (Relativ)
+    BALLVERFOLGENRELATIVPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 3 * VERTICALELEMENTDISTANCE
     #Knopf Gesichtserkennung
     GESICHTSERKENNUNGPOS = MODUSPOS[0] + HORIZONTALDISTANCE, MODUSPOS[1] + 4 * VERTICALELEMENTDISTANCE
     #Knopf Starten/Landen
@@ -98,7 +98,7 @@ class Dashboard:
         self.ballfolgenabsolut = Button("Ball folgen (Absolut)", Dashboard.BALLFOLGENABSOLUTPOS[0], Dashboard.BALLFOLGENABSOLUTPOS[1])
 
         #Knopf Ball folgen (cm)
-        self.ballfolgencm = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENCMPOS[0], Dashboard.BALLVERFOLGENCMPOS[1])
+        self.ballfolgenrelativ = Button("Ball folgen (cm)", Dashboard.BALLVERFOLGENRELATIVPOS[0], Dashboard.BALLVERFOLGENRELATIVPOS[1])
 
         #Knopf Gesichtserkennung
         self.gesichtserkennung = Button("Gesichtserkennung", Dashboard.GESICHTSERKENNUNGPOS[0], Dashboard.GESICHTSERKENNUNGPOS[1])
@@ -131,7 +131,7 @@ class Dashboard:
 
     def checkButton(self, modus):
 
-        eingabe, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4 = False, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        eingabe, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgenrelativ, gesichtserkennung, mod4 = False, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
         if self.freiermodus.isPressed():
             modus = 0
@@ -139,7 +139,7 @@ class Dashboard:
         elif self.ballfolgenabsolut.isPressed():
             modus = 1
             eingabe = True
-        elif self.ballfolgencm.isPressed():
+        elif self.ballfolgenrelativ.isPressed():
             modus = 2
             eingabe = True
         elif self.gesichtserkennung.isPressed():
@@ -163,17 +163,17 @@ class Dashboard:
         else:
             self.ballfolgenabsolut.MARGINCOLOR = Button.MARGINCOLOR
         if modus == 2:
-            self.ballfolgencm.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
+            self.ballfolgenrelativ.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
             ballfolgencm = 1
         else:
-            self.ballfolgencm.MARGINCOLOR = Button.MARGINCOLOR
+            self.ballfolgenrelativ.MARGINCOLOR = Button.MARGINCOLOR
         if modus == 3:
             self.gesichtserkennung.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
             gesichtserkennung = 1
         else:
             self.gesichtserkennung.MARGINCOLOR = Button.MARGINCOLOR
 
-        return [int(eingabe), 1, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgencm, gesichtserkennung, mod4]
+        return [int(eingabe), 1, ud, yv, fb, rl, start, flip, freiermodus, ballfolgenabsolut, ballfolgenrelativ, gesichtserkennung, mod4]
 
     def loadAll(self, img, height, battery, temperature, speedx, speedy, speedz,  modus):
         self.screen.fill(Dashboard.BACKGROUNDCOLOR)
@@ -217,7 +217,7 @@ class Dashboard:
         #Knopf Ball folgen (Absolut)
         self.ballfolgenabsolut.showButton(self.screen)
         #Knopf Ball folgen (cm)
-        self.ballfolgencm.showButton(self.screen)
+        self.ballfolgenrelativ.showButton(self.screen)
         #Knopf Gesichtserkennung
         self.gesichtserkennung.showButton(self.screen)
         #Knopf Flip
