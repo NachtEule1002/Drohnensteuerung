@@ -164,7 +164,7 @@ class Dashboard:
             self.ballfolgenabsolut.MARGINCOLOR = Button.MARGINCOLOR
         if modus == 2:
             self.ballfolgenrelativ.MARGINCOLOR = Button.PRESSEDMARGINCOLOR
-            ballfolgencm = 1
+            ballfolgenrelativ = 1
         else:
             self.ballfolgenrelativ.MARGINCOLOR = Button.MARGINCOLOR
         if modus == 3:
