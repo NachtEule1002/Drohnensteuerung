@@ -167,8 +167,8 @@ def followBallAbsolute(img): #BALL MIT ABSOLUTEN GESCHWINDIGKEITEN FOLGEN
             movenear = sizemaxspeed
 
     cv2.putText(img,
-                "movex: " + str(movex) + "; movez: " + str(movez) + ";movenear: " + str(movenear),
-                (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                "movex: " + str(round(movex)) + "; movez: " + str(round(movez)) + "; movenear: " + str(round(movenear)),
+                (50, 700), cv2.FONT_HERSHEY_SIMPLEX, 1,
                 (0, 0, 255), 2,
                 cv2.LINE_AA)
 
@@ -202,8 +202,8 @@ def followBallCM(img):
             diff_y_cm = 0
 
         cv2.putText(img,
-                    "x-diff [cm]: " + str(diff_x_cm) + "; z-diff [cm]: " + str(diff_y_cm),
-                    (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    "[cm] x-diff: " + str(diff_x_cm) + "; z-diff: " + str(diff_y_cm),
+                    (50, 700), cv2.FONT_HERSHEY_SIMPLEX, 1,
                     (0, 0, 255), 2,
                     cv2.LINE_AA)
 
@@ -226,8 +226,8 @@ def RotateFace(img):
         rotation = -int(diffx/height * 65)
 
         cv2.putText(img,
-                    "Rotation: " + str(rotation),
-                    (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    "Rotation: " + str(rotation) + " deg",
+                    (50, 700), cv2.FONT_HERSHEY_SIMPLEX, 1,
                     (0, 0, 255), 2,
                     cv2.LINE_AA)
 
@@ -262,21 +262,17 @@ def getBallPos(hsv_img, img):
             curx = int(rct[0][0])
             cury = int(rct[0][1])
 
-            cv2.putText(img, "x: " + str(curx) + "; y: " + str(cury), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 0, 255), 2,
-                        cv2.LINE_AA)
-
             diffx = (int(width / 2) - curx)
             diffy = (int(height / 2) - cury)
 
             cv2.putText(img,
-                        "x: " + str(curx) + "; y: " + str(cury) + "; diffx: " + str(diffx) + "; diffy: " + str(diffy),
-                        (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        "[px] x: " + str(curx) + "; y: " + str(cury) + "; diffx: " + str(diffx) + "; diffy: " + str(diffy),
+                        (50, 600), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (0, 0, 255), 2,
                         cv2.LINE_AA)
             cv2.putText(img,
                         "Flaeche: " + str(c.size),
-                        (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (50, 650), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (0, 0, 255), 2,
                         cv2.LINE_AA)
 
