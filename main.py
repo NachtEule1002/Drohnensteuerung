@@ -27,7 +27,7 @@ if "Request timed out" in str(out):
     DROHNE_AKTIV = False
 else:
     print("Drohne verbunden")
-    DROHNE_AKTIV_TEXT = "Drohne nicht verbunden"
+    DROHNE_AKTIV_TEXT = "Drohne verbunden"
     DROHNE_AKTIV = True
 
 running = True
@@ -86,6 +86,7 @@ while running:
             speedy = drone.getspeed("y")
             speedz = -drone.getspeed("z")
             count = 0
+            drone.keepalive()
 
         DashboardDaten = dashboard.loadAll(currentImg, height, battery, temperature, speedx, speedy, speedz, videostatus)
 
