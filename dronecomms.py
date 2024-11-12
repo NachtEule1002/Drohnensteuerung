@@ -106,12 +106,21 @@ class dronecomms(object):
         if self.tookoff:
             self.MYTELLO.flip_forward()
 
+    def keepalive(self):
+        if self.tookoff:
+            try:
+                self.MYTELLO.send_keepalive()
+            except:
+                print("Fehler keepalive")
+
     def sendcontrols(self,mode, movementtable):
 
         # Steuerungsstandard: [Eingabe gegeben, Eingabemodus, Hoch + Runter, Drehen Uhrzeigersinn + Gegenuhrzeigersinn, Vorwärts + Rückwärts, Rechts + Links, starten + Landen, Manuell, Auto1, Auto2, Auto3]
         # [False oder True, 0 und 1, -100 bis 100, -100 bis 100, -100 bis 100, -100 bis 100, 0 und 1, 0 und 1, 0 und 1, 0 und 1, 0 und 1]
 
         if self.connected:
+
+
             if movementtable[4] == 1 and self.takeoff_initiated == False:
                 self.takeoff_initiated = True
                 if self.tookoff == False: # takeoff
@@ -125,6 +134,7 @@ class dronecomms(object):
                 self.takeoff_initiated = False
 
             if self.tookoff:
+
                 if movementtable[5] == 1:   # optional flip
                     self.flip()
                 if mode == 1: # move constantly

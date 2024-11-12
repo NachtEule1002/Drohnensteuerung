@@ -186,7 +186,7 @@ def followBallCM(img):
 
     diffx, diffy, size, img = getBallPos(hsv_img, img) #Position des Balls
 
-    if (diffx+diffy) > 0:
+    if (abs(diffx)+abs(diffy)) > 0:
 
         max_dist_x = (-0.021*size) + 65
         max_dist_y = max_dist_x * (height/width)
@@ -253,7 +253,7 @@ def getBallPos(hsv_img, img):
 
     if len(contours) > 0:
         c = max(contours, key=cv2.contourArea)
-        if len(c) > 5 and c.size > 500:
+        if len(c) > 5 and c.size > 300:
             cv2.drawContours(hsv_img, c, -1, (0, 0, 255), 1)
 
             rct = cv2.fitEllipse(c)
